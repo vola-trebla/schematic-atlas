@@ -4,17 +4,16 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
   context7: {
     name: "context7",
     category: "documentation",
-    nodes: ["query", "context7", "LLM context"],
+    nodes: ["library name", "context7", "LLM context"],
     purpose:
-      "Up-to-date documentation and code examples as a service for LLMs, eliminating hallucinations by providing fresh data from source.",
-    highlight: "eliminating hallucinations",
+      "Resolves any library name to a Context7 ID, then injects version-accurate docs and code examples directly into the agent's context.",
+    highlight: "version-accurate docs",
     repo: "https://github.com/upstash/context7",
-    package: "@upstash/context7",
+    package: "@upstash/context7-mcp",
     license: "MIT",
     stats: [
-      ["5", "tools"],
-      ["2", "groups"],
-      ["4", "clients"],
+      ["2", "MCP tools"],
+      ["30+", "clients"],
       ["MIT", "license"],
     ],
     flow: {
@@ -25,69 +24,50 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
       steps: [
         {
           n: 1,
-          name: "lookup_library",
-          body: "Match library name to unique Context7 index ID.",
-          question: '"which library?"',
+          name: "resolve-library-id",
+          args: "libraryName, query",
+          body: "Fuzzy-matches the library name against the Context7 index and returns the canonical slash-ID (e.g. /vercel/next.js). Ranks by relevance to the user's query.",
+          question: '"which exact library?"',
+          branch: {
+            n: "!",
+            name: "ambiguous-match",
+            condition: "if multiple hits",
+            body: "Returns ranked list. Agent must pick the correct ID before proceeding — wrong ID pulls wrong docs.",
+          },
         },
         {
           n: 2,
-          name: "fetch_live_source",
-          body: "Crawl primary sources or fetch from Upstash cache.",
-          question: '"is it fresh?"',
-        },
-        {
-          n: 3,
-          name: "query_documentation",
-          body: "Inject snippets directly into the LLM context.",
+          name: "query-docs",
+          args: "libraryId, query",
+          body: "Fetches version-specific documentation and code examples from the Context7 backend using the resolved ID. Injects snippets directly into the LLM context.",
           question: '"what to inject?"',
         },
       ],
     },
-    groups: [
-      {
-        key: "search",
-        title: "Search",
-        icon: "search",
-        blurb: "Locate. Pattern-match across content.",
-        items: [
-          { name: "lookup_library", sub: "resolve name to unique ID" },
-          { name: "query_documentation", sub: "fetch snippets by ID" },
-        ],
-      },
-      {
-        key: "config",
-        title: "Configuration",
-        icon: "terminal",
-        blurb: "Set up the run.",
-        items: [
-          { name: "setup_context", sub: "initialize environment" },
-          { name: "configure_credentials", sub: "manage API keys" },
-        ],
-      },
-      {
-        key: "misc",
-        title: "Misc",
-        icon: "tool",
-        blurb: "Support tools.",
-        items: [{ name: "fetch_live_source", sub: "crawl primary sources" }],
-      },
+    tools: [
+      { name: "resolve-library-id", sub: "name → Context7 slash-ID" },
+      { name: "query-docs", sub: "slash-ID → versioned docs + examples" },
     ],
     notes: [
       {
-        body: "API Key Recommended. Get a free key at context7.com for higher rate limits.",
+        body: "API key recommended. Free key at context7.com/dashboard gives higher rate limits.",
         condition: "rate-limit",
       },
     ],
     example: {
       lang: "bash",
-      code: 'npx ctx7 setup --cursor\nctx7 library supabase\nctx7 docs /supabase/docs "how to auth?"',
-      captions: ["Setup is one-time", "Search for the lib ID first", "Then query the docs"],
+      code: 'npx ctx7 setup --claude\nctx7 library supabase "auth"\nctx7 docs /supabase/supabase "email password sign-up"',
+      captions: [
+        "One-time setup — injects MCP config",
+        "Find the canonical library ID first",
+        "Then pull versioned docs into context",
+      ],
     },
     install: {
       npx: "npx ctx7 setup",
+      mcp: "https://mcp.context7.com/mcp",
     },
-    run: "ctx7 library lodash",
-    worksWith: ["Cursor · Claude Code", "Cline · RooCode", "Any MCP Client"],
+    worksWith: ["Claude Code · Claude Desktop", "Cursor · VS Code", "Any MCP client"],
   },
   "env-secret-exposure-analyzer": {
     name: "env-secret-exposure-analyzer",
@@ -352,24 +332,73 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
     run: "mcp-grep --path ./src",
     worksWith: ["any MCP client", "ripgrep ≥ 13 (bundled)", "macOS · Linux · Windows"],
   },
-  "sqlite-mcp": {
-    name: "sqlite-mcp",
+  dbhub: {
+    name: "dbhub",
     partTag: "P.01",
     category: "persistence",
-    nodes: ["query", "sqlite-mcp", "database"],
+    nodes: ["agent", "dbhub", "database"],
     purpose:
-      "Provides read/write access to local SQLite databases with safe query execution and schema inspection.",
-    highlight: "SQLite databases",
+      "Zero-dependency MCP gateway that connects any agent to PostgreSQL, MySQL, MariaDB, SQL Server, or SQLite through just 2 tools.",
+    highlight: "2 tools",
+    repo: "https://github.com/bytebase/dbhub",
+    package: "@bytebase/dbhub",
+    license: "MIT",
     stats: [
-      ["v0.4.2", "stable"],
-      ["Local", "type"],
+      ["2", "MCP tools"],
+      ["0", "dependencies"],
+      ["5", "databases"],
+      ["2.8k", "stars"],
     ],
-    tools: [
-      { name: "query", sub: "Execute SQL read/write" },
-      { name: "list_tables", sub: "Get schema overview" },
-    ],
-    install: {
-      npm: "npm install -g @modelcontextprotocol/server-sqlite",
+    flow: {
+      input: {
+        label: "SQL intent",
+        sub: "← from agent",
+      },
+      steps: [
+        {
+          n: 1,
+          name: "search_objects",
+          args: "database, query",
+          body: "Progressive schema disclosure — lists tables, columns, indexes, and procedures matching the query. Agent uses this to build the correct SQL without guessing schema.",
+          question: '"what schema exists?"',
+        },
+        {
+          n: 2,
+          name: "execute_sql",
+          args: "database, sql",
+          body: "Executes the SQL with transaction support. Read-only mode, row limiting, and query timeout guard against runaway operations.",
+          question: '"is write allowed?"',
+          branch: {
+            n: "!",
+            name: "read-only mode",
+            condition: "if readonly: true",
+            body: "All write statements rejected at gateway level. Safe for production connections.",
+          },
+        },
+      ],
     },
+    tools: [
+      { name: "search_objects", sub: "explore schema — tables, columns, indexes" },
+      { name: "execute_sql", sub: "run SQL with safety guardrails" },
+    ],
+    notes: [
+      {
+        body: "Multi-database mode: define named connections in dbhub.toml to query prod, staging, and dev simultaneously.",
+        condition: "multi-db",
+      },
+    ],
+    example: {
+      lang: "bash",
+      code: 'npx @bytebase/dbhub@latest \\\n  --transport stdio \\\n  --dsn "sqlite:///path/to/app.db"',
+      captions: [
+        "stdio transport for Claude Desktop / Claude Code",
+        "swap dsn for postgres:// or mysql:// — same config",
+      ],
+    },
+    install: {
+      npx: "npx @bytebase/dbhub@latest --transport stdio --dsn <DSN>",
+      docker: "docker run --rm bytebase/dbhub --transport http --port 8080 --dsn <DSN>",
+    },
+    worksWith: ["Claude Desktop · Claude Code", "Cursor · VS Code", "Any MCP client"],
   },
 };
