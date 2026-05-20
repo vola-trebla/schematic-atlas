@@ -24,7 +24,7 @@ import {
   LeaderCaption,
 } from "./schematic";
 
-const ATLAS_LINK = "/";
+const ATLAS_LINK = process.env.NEXT_PUBLIC_BASE_PATH ?? "/";
 
 /* ───────────────────────── Atlas strip (top nav) ───────────────────────── */
 function AtlasStrip({ config }: { config: ProtocolConfig }) {
