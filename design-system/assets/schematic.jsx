@@ -1,3 +1,8 @@
+/* PROTOTYPE / REFERENCE ONLY — do not edit expecting changes to ship.
+   Canonical implementation: web/src/design-system/schematic.tsx
+   Use this file to sketch new motifs (Babel-in-browser, no build step).
+   Once validated, port changes to the TSX file.
+*/
 /* Schematic motifs — the signature ingredients of the brand.
    Use these to compose any UI surface. Globals at end of file.
    Depends on: colors_and_type.css (for CSS vars).

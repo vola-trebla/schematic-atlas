@@ -1,4 +1,20 @@
-# Schematic Atlas — Visual Encyclopedia of MCP Tooling
+# Schematic Atlas — Design System (prototype / reference)
+
+> **This folder is a read-only prototype playground.**
+> The canonical implementation lives in `web/src/design-system/`.
+>
+> | File here                     | Canonical counterpart                         |
+> | ----------------------------- | --------------------------------------------- |
+> | `assets/schematic.jsx`        | `web/src/design-system/schematic.tsx`         |
+> | `colors_and_type.css`         | `web/src/design-system/globals.css`           |
+> | `templates/protocol-page.jsx` | `web/src/design-system/protocol-renderer.tsx` |
+> | `catalog/atlas.jsx`           | `web/src/design-system/catalog.client.tsx`    |
+>
+> Use this folder to **sketch new motifs** using Babel-in-browser (no build step).
+> Once validated, port the change to `web/src/design-system/` — that is the single source of truth that ships.
+> Do not edit `schematic.jsx` or `colors_and_type.css` expecting those changes to propagate to the deployed app.
+
+---
 
 **The product.** A catalog of MCP / AI-tooling protocols, each rendered as a
 single schematic page. One protocol → one page. The page is the entry. The
