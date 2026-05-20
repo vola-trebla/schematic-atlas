@@ -5,7 +5,7 @@
    Schema (locked):
    {
      name:       string        // mono, filename-style. "playwright-trace-decoder"
-     partTag?:   string        // "T.04"
+     partTag?:   string        // "TRACE", "GREP", "CTX7" — ticker-style
      purpose:    string        // one sentence. The whole point of the protocol.
      highlight?: string        // optional substring of purpose to highlighter
      repo?:      string        // github / source URL

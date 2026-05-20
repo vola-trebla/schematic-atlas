@@ -20,7 +20,7 @@ the Schematic Atlas.
 const CONFIG = {
   // ── identity ─────────────────────────────────────
   name:       string,        // REQUIRED. Mono, filename-style. "playwright-trace-decoder"
-  partTag:    string?,       // "T.04" — auto-stamped as a square tag in the top-right
+  partTag:    string?,       // "TRACE" — auto-stamped as a square tag in the top-right
   purpose:    string,        // REQUIRED. ONE sentence. The whole point of the protocol.
   highlight:  string?,       // Substring of `purpose` to draw the highlighter behind.
   repo:       string?,       // GitHub / source URL. Renders inline with the GitHub icon.
@@ -105,7 +105,7 @@ After creating the page file, append an entry to `ATLAS` in
 ```js
 {
   name: "your-tool",
-  partTag: "T.05",
+  partTag: "ESEA",
   purpose: "One sentence — same as on the page.",
   href: "../templates/examples/your-tool.html",
   category: "debugging",            // freeform string; adds itself to the filter chips
@@ -228,6 +228,6 @@ Same as any other page. Optionally set `enriched: true` for internal
 analytics — it does NOT render anywhere:
 
 ```js
-{ name: "your-tool", partTag: "T.05", purpose: "…", href: "…",
+{ name: "your-tool", partTag: "ESEA", purpose: "…", href: "…",
   category: "…", enriched: true, nodes: ["…","…","…"], …}
 ```
