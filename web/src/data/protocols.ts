@@ -1,6 +1,9 @@
-export const PROTOCOLS: Record<string, any> = {
+import type { ProtocolConfig } from "../types/protocol";
+
+export const PROTOCOLS: Record<string, ProtocolConfig> = {
   context7: {
     name: "context7",
+    category: "documentation",
     purpose:
       "Up-to-date documentation and code examples as a service for LLMs, eliminating hallucinations by providing fresh data from source.",
     highlight: "eliminating hallucinations",
@@ -88,6 +91,7 @@ export const PROTOCOLS: Record<string, any> = {
   "env-secret-exposure-analyzer": {
     name: "env-secret-exposure-analyzer",
     partTag: "S.02",
+    category: "security",
     purpose:
       "Scans projects for secret exposure risks (API keys, unprotected .env, logs) before an AI agent accidentally exfiltrates them.",
     highlight: "secret exposure risks",
@@ -148,6 +152,7 @@ export const PROTOCOLS: Record<string, any> = {
   "playwright-trace-decoder": {
     name: "playwright-trace-decoder",
     partTag: "T.04",
+    category: "testing",
     purpose:
       "An MCP server that turns Playwright trace.zip into structured signal for AI-driven failure analysis.",
     highlight: "trace.zip",
@@ -290,6 +295,7 @@ export const PROTOCOLS: Record<string, any> = {
   "mcp-grep": {
     name: "mcp-grep",
     partTag: "T.01",
+    category: "search",
     purpose:
       "Sub-millisecond grep as an MCP server, with glob-aware filtering and streaming matches.",
     highlight: "Sub-millisecond grep",
@@ -345,6 +351,7 @@ export const PROTOCOLS: Record<string, any> = {
   "sqlite-mcp": {
     name: "sqlite-mcp",
     partTag: "P.01",
+    category: "persistence",
     purpose:
       "Provides read/write access to local SQLite databases with safe query execution and schema inspection.",
     highlight: "SQLite databases",

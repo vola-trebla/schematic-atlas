@@ -1,6 +1,12 @@
-"use client";
+/**
+ * Schematic motif library — server-safe primitives.
+ * SButton (the only stateful component) lives in schematic-client.tsx.
+ */
+import type { CSSProperties, ReactNode } from "react";
 
-import React from "react";
+import type { IconName } from "../types/protocol";
+
+export { IconName };
 
 export const InkColors = {
   ink: "#15161B",
@@ -11,9 +17,9 @@ export const InkColors = {
   red: "#B43A2A",
   blue: "#26537B",
   green: "#3F6E3A",
-};
+} as const;
 
-/* ───────────────────────── Wobble SVG defs (inject once) ───────────────────────── */
+/* ───────────────────────── Wobble SVG defs (inject once at root) ───────────────────────── */
 export function WobbleDefs() {
   return (
     <svg
@@ -77,13 +83,21 @@ export function WobbleDefs() {
 }
 
 /* ───────────────────────── Dimension line ───────────────────────── */
+type DimLineProps = {
+  label: string;
+  width?: number;
+  color?: string;
+  align?: "above" | "below";
+  style?: CSSProperties;
+};
+
 export function DimLine({
   label,
   width = 200,
   color = InkColors.ink,
   align = "above",
   style,
-}: any) {
+}: DimLineProps) {
   const h = 22;
   return (
     <span
@@ -129,7 +143,9 @@ export function DimLine({
 }
 
 /* ───────────────────────── Vertical dimension line ───────────────────────── */
-export function DimLineV({ label, height = 200, color = InkColors.ink, style }: any) {
+type DimLineVProps = { label: string; height?: number; color?: string; style?: CSSProperties };
+
+export function DimLineV({ label, height = 200, color = InkColors.ink, style }: DimLineVProps) {
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: 4, ...style }}>
       <svg width="22" height={height} viewBox={`0 0 22 ${height}`} fill="none" stroke={color}>
@@ -163,14 +179,22 @@ export function DimLineV({ label, height = 200, color = InkColors.ink, style }: 
   );
 }
 
-/* ───────────────────────── Callout circle (lettered) ───────────────────────── */
+/* ───────────────────────── Callout circle (lettered / numbered) ───────────────────────── */
+type CalloutProps = {
+  letter?: string;
+  size?: number;
+  color?: string;
+  filled?: boolean;
+  style?: CSSProperties;
+};
+
 export function Callout({
   letter = "A",
   size = 26,
   color = InkColors.ink,
   filled = false,
   style,
-}: any) {
+}: CalloutProps) {
   return (
     <span
       style={{
@@ -196,7 +220,19 @@ export function Callout({
 }
 
 /* ───────────────────────── Leader line + caption ───────────────────────── */
-export function LeaderCaption({ letter, children, color = InkColors.ink, style }: any) {
+type LeaderCaptionProps = {
+  letter: string;
+  children: ReactNode;
+  color?: string;
+  style?: CSSProperties;
+};
+
+export function LeaderCaption({
+  letter,
+  children,
+  color = InkColors.ink,
+  style,
+}: LeaderCaptionProps) {
   return (
     <span style={{ display: "inline-flex", alignItems: "flex-start", gap: 8, ...style }}>
       <Callout letter={letter} color={color} />
@@ -217,18 +253,28 @@ export function LeaderCaption({ letter, children, color = InkColors.ink, style }
 }
 
 /* ───────────────────────── Numbered step pill ───────────────────────── */
-export function StepNum({ n = 1, ...rest }: any) {
+type StepNumProps = Omit<CalloutProps, "letter"> & { n?: number | string };
+
+export function StepNum({ n = 1, ...rest }: StepNumProps) {
   return <Callout letter={String(n)} {...rest} />;
 }
 
 /* ───────────────────────── Arrow (hand-drawn) ───────────────────────── */
+type ArrowProps = {
+  length?: number;
+  direction?: "right" | "left" | "down" | "up";
+  color?: string;
+  dashed?: boolean;
+  style?: CSSProperties;
+};
+
 export function Arrow({
   length = 80,
   direction = "right",
   color = InkColors.ink,
   dashed = false,
   style,
-}: any) {
+}: ArrowProps) {
   const w = direction === "right" || direction === "left" ? length : 16;
   const h = direction === "right" || direction === "left" ? 16 : length;
   const dashAttr = dashed ? "6 4" : undefined;
@@ -243,7 +289,7 @@ export function Arrow({
   } else if (direction === "down") {
     pathD = `M 8 1 L 8 ${length - 6}`;
     arrowD = `M 3 ${length - 10} L 8 ${length - 1} L 13 ${length - 10}`;
-  } else if (direction === "up") {
+  } else {
     pathD = `M 8 ${length - 1} L 8 6`;
     arrowD = `M 3 10 L 8 1 L 13 10`;
   }
@@ -256,6 +302,16 @@ export function Arrow({
 }
 
 /* ───────────────────────── Hatching block ───────────────────────── */
+type HatchProps = {
+  width?: number | string;
+  height?: number;
+  angle?: number;
+  spacing?: number;
+  color?: string;
+  opacity?: number;
+  style?: CSSProperties;
+};
+
 export function Hatch({
   width = "100%",
   height = 60,
@@ -264,30 +320,29 @@ export function Hatch({
   color = InkColors.ink,
   opacity = 0.45,
   style,
-}: any) {
+}: HatchProps) {
   const bg = `repeating-linear-gradient(${angle}deg, ${color} 0 1px, transparent 1px ${spacing}px)`;
   return (
-    <span
-      style={{
-        display: "block",
-        width,
-        height,
-        backgroundImage: bg,
-        opacity,
-        ...style,
-      }}
-    />
+    <span style={{ display: "block", width, height, backgroundImage: bg, opacity, ...style }} />
   );
 }
 
 /* ───────────────────────── Stamp ───────────────────────── */
+type StampProps = {
+  children?: ReactNode;
+  color?: string;
+  rotate?: number;
+  size?: number | string;
+  style?: CSSProperties;
+};
+
 export function Stamp({
   children = "DRAFT",
   color = InkColors.red,
   rotate = -3,
   size = "var(--fs-h3)",
   style,
-}: any) {
+}: StampProps) {
   return (
     <span
       style={{
@@ -311,13 +366,21 @@ export function Stamp({
 }
 
 /* ───────────────────────── Margin annotation ───────────────────────── */
+type AnnotationProps = {
+  children: ReactNode;
+  side?: "left" | "right";
+  color?: string;
+  leaderLength?: number;
+  style?: CSSProperties;
+};
+
 export function Annotation({
   children,
   side = "right",
   color = InkColors.blue,
   leaderLength = 40,
   style,
-}: any) {
+}: AnnotationProps) {
   const leader = (
     <svg
       width={leaderLength}
@@ -364,7 +427,9 @@ export function Annotation({
 }
 
 /* ───────────────────────── Folded corner ───────────────────────── */
-export function FoldedCorner({ size = 28, color = InkColors.ink, style }: any) {
+type FoldedCornerProps = { size?: number; color?: string; style?: CSSProperties };
+
+export function FoldedCorner({ size = 28, color = InkColors.ink, style }: FoldedCornerProps) {
   return (
     <svg
       width={size}
@@ -389,7 +454,9 @@ export function FoldedCorner({ size = 28, color = InkColors.ink, style }: any) {
 }
 
 /* ───────────────────────── Part-number tag ───────────────────────── */
-export function PartTag({ children = "A.01", style }: any) {
+type PartTagProps = { children?: ReactNode; style?: CSSProperties };
+
+export function PartTag({ children = "A.01", style }: PartTagProps) {
   return (
     <span
       className="mono"
@@ -412,7 +479,9 @@ export function PartTag({ children = "A.01", style }: any) {
 }
 
 /* ───────────────────────── Pen-stroke divider ───────────────────────── */
-export function PenDivider({ width = "100%", color = InkColors.ink, style }: any) {
+type PenDividerProps = { width?: number | string; color?: string; style?: CSSProperties };
+
+export function PenDivider({ width = "100%", color = InkColors.ink, style }: PenDividerProps) {
   return (
     <svg
       width={width}
@@ -433,6 +502,18 @@ export function PenDivider({ width = "100%", color = InkColors.ink, style }: any
 }
 
 /* ───────────────────────── Schematic card frame ───────────────────────── */
+type SchematicCardProps = {
+  children?: ReactNode;
+  partTag?: string;
+  folded?: boolean;
+  shadow?: boolean;
+  stamp?: string;
+  pad?: string | number;
+  style?: CSSProperties;
+  /** Additional props forwarded to the inner content div. */
+  [key: string]: unknown;
+};
+
 export function SchematicCard({
   children,
   partTag,
@@ -442,7 +523,7 @@ export function SchematicCard({
   pad = "var(--sp-5)",
   style,
   ...rest
-}: any) {
+}: SchematicCardProps) {
   return (
     <div style={{ position: "relative", ...style }}>
       {shadow && (
@@ -454,7 +535,8 @@ export function SchematicCard({
             left: 8,
             right: -8,
             bottom: -8,
-            zIndex: 0,
+            // z-index: -1 keeps shadow behind the card surface within this stacking context
+            zIndex: -1,
             backgroundImage: `repeating-linear-gradient(45deg, ${InkColors.ink} 0 1px, transparent 1px 5px)`,
             opacity: 0.5,
           }}
@@ -467,8 +549,8 @@ export function SchematicCard({
           zIndex: 1,
           border: `1.5px solid ${InkColors.ink}`,
           padding: pad,
-          background: "var(--paper-bright)",
-          filter: "url(#wobble-subtle)",
+          // transparent: cards live on the paper, not as separate bright surfaces
+          background: "transparent",
         }}
       >
         {partTag && (
@@ -496,51 +578,18 @@ export function SchematicCard({
   );
 }
 
-/* ───────────────────────── Schematic button ───────────────────────── */
-export function SButton({ children, primary, onClick, type = "button", style, ...rest }: any) {
-  const [pressed, setPressed] = React.useState(false);
-  return (
-    <button
-      type={type}
-      onClick={onClick}
-      onMouseDown={() => setPressed(true)}
-      onMouseUp={() => setPressed(false)}
-      onMouseLeave={() => setPressed(false)}
-      {...rest}
-      style={{
-        position: "relative",
-        fontFamily: "var(--font-mono)",
-        fontSize: "var(--fs-mono)",
-        fontWeight: 600,
-        letterSpacing: "0.10em",
-        textTransform: "uppercase",
-        background: primary ? InkColors.ink : "var(--paper-bright)",
-        color: primary ? "var(--paper)" : InkColors.ink,
-        border: `1.5px solid ${InkColors.ink}`,
-        padding: "10px 18px",
-        cursor: "pointer",
-        transform: pressed ? "translate(2px, 2px)" : "none",
-        transition: "transform 120ms cubic-bezier(0.7,0,0.3,1)",
-        ...style,
-      }}
-    >
-      <span
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          border: `1.5px solid ${InkColors.faint}`,
-          transform: "translate(3px, 3px)",
-          zIndex: -1,
-        }}
-      />
-      {children}
-    </button>
-  );
-}
-
 /* ───────────────────────── Schematic input ───────────────────────── */
-export function SInput({ label, hint, value, onChange, placeholder, style, ...rest }: any) {
+type SInputProps = {
+  label?: string;
+  hint?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  style?: CSSProperties;
+  [key: string]: unknown;
+};
+
+export function SInput({ label, hint, value, onChange, placeholder, style, ...rest }: SInputProps) {
   return (
     <label style={{ display: "block", ...style }}>
       {label && (
@@ -564,7 +613,7 @@ export function SInput({ label, hint, value, onChange, placeholder, style, ...re
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        {...rest}
+        {...(rest as React.InputHTMLAttributes<HTMLInputElement>)}
         style={{
           width: "100%",
           background: "transparent",
@@ -596,7 +645,9 @@ export function SInput({ label, hint, value, onChange, placeholder, style, ...re
 }
 
 /* ───────────────────────── Tag chip (adhesive label) ───────────────────────── */
-export function Chip({ children, color = InkColors.ink, style }: any) {
+type ChipProps = { children: ReactNode; color?: string; style?: CSSProperties };
+
+export function Chip({ children, color = InkColors.ink, style }: ChipProps) {
   return (
     <span
       style={{
@@ -622,7 +673,9 @@ export function Chip({ children, color = InkColors.ink, style }: any) {
 }
 
 /* ───────────────────────── Schematic check ───────────────────────── */
-export function CheckMark({ size = 18, color = InkColors.green, style }: any) {
+type MarkProps = { size?: number; color?: string; style?: CSSProperties };
+
+export function CheckMark({ size = 18, color = InkColors.green, style }: MarkProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} style={style}>
       <path
@@ -636,7 +689,7 @@ export function CheckMark({ size = 18, color = InkColors.green, style }: any) {
 }
 
 /* ───────────────────────── Schematic cross ───────────────────────── */
-export function CrossMark({ size = 18, color = InkColors.red, style }: any) {
+export function CrossMark({ size = 18, color = InkColors.red, style }: MarkProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} style={style}>
       <path
@@ -650,7 +703,7 @@ export function CrossMark({ size = 18, color = InkColors.red, style }: any) {
 }
 
 /* ───────────────────────── Icon ───────────────────────── */
-const ICON_PATHS: any = {
+const ICON_PATHS: Record<IconName, React.ReactNode> = {
   github: (
     <g>
       <path d="M12 2.5 C 6.8 2.5 2.5 6.8 2.5 12 c 0 4.2 2.7 7.7 6.5 9 c 0.5 0.1 0.6 -0.2 0.6 -0.5 v -1.6 c -2.6 0.6 -3.2 -1.2 -3.2 -1.2 c -0.4 -1.1 -1.1 -1.4 -1.1 -1.4 c -0.9 -0.6 0.1 -0.6 0.1 -0.6 c 1 0.1 1.5 1 1.5 1 c 0.9 1.5 2.3 1.1 2.9 0.8 c 0.1 -0.7 0.4 -1.1 0.6 -1.4 c -2.1 -0.2 -4.3 -1 -4.3 -4.6 c 0 -1 0.4 -1.9 1 -2.5 c -0.1 -0.3 -0.4 -1.3 0.1 -2.7 c 0 0 0.8 -0.3 2.7 1 c 0.8 -0.2 1.6 -0.3 2.5 -0.3 c 0.8 0 1.7 0.1 2.5 0.3 c 1.9 -1.3 2.7 -1 2.7 -1 c 0.5 1.4 0.2 2.4 0.1 2.7 c 0.6 0.7 1 1.5 1 2.5 c 0 3.6 -2.2 4.4 -4.3 4.6 c 0.3 0.3 0.6 0.9 0.6 1.8 v 2.6 c 0 0.3 0.2 0.6 0.6 0.5 c 3.8 -1.3 6.5 -4.8 6.5 -9 c 0 -5.2 -4.2 -9.5 -9.5 -9.5 z" />
@@ -741,6 +794,12 @@ const ICON_PATHS: any = {
       <path d="M 15 7 L 20 12 L 15 17" strokeLinejoin="round" />
     </g>
   ),
+  arrow_left: (
+    <g>
+      <line x1="20" y1="12" x2="4" y2="12" />
+      <path d="M 9 7 L 4 12 L 9 17" strokeLinejoin="round" />
+    </g>
+  ),
   plus: (
     <g>
       <line x1="12" y1="5" x2="12" y2="19" />
@@ -760,7 +819,21 @@ const ICON_PATHS: any = {
   ),
 };
 
-export function Icon({ name, size = 20, color = InkColors.ink, strokeWidth = 1.6, style }: any) {
+type IconProps = {
+  name: IconName;
+  size?: number;
+  color?: string;
+  strokeWidth?: number;
+  style?: CSSProperties;
+};
+
+export function Icon({
+  name,
+  size = 20,
+  color = InkColors.ink,
+  strokeWidth = 1.6,
+  style,
+}: IconProps) {
   const path = ICON_PATHS[name];
   return (
     <svg
@@ -780,14 +853,21 @@ export function Icon({ name, size = 20, color = InkColors.ink, strokeWidth = 1.6
 }
 
 /* ───────────────────────── Stroke-draw wrapper ───────────────────────── */
-export function StrokeDraw({ children, duration = 600, delay = 0, style }: any) {
+type StrokeDrawProps = {
+  children: ReactNode;
+  duration?: number;
+  delay?: number;
+  style?: CSSProperties;
+};
+
+export function StrokeDraw({ children, duration = 600, delay = 0, style }: StrokeDrawProps) {
   return (
     <span
       className="anim-draw"
       style={{
         display: "inline-block",
-        ["--dash-len" as any]: 800,
-        ["--dur-slow" as any]: `${duration}ms`,
+        ["--dash-len" as string]: 800,
+        ["--dur-slow" as string]: `${duration}ms`,
         animationDelay: `${delay}ms`,
         ...style,
       }}

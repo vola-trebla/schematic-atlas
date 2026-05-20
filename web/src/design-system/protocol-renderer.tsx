@@ -1,7 +1,19 @@
-"use client";
+/**
+ * Protocol page renderer — Server Component.
+ * Only InstallSection (tab state) is a client boundary; everything else SSRs.
+ */
+import Link from "next/link";
 
-import React from "react";
+import type {
+  ProtocolConfig,
+  FlowStep as FlowStepType,
+  Group,
+  Note,
+  Example,
+  Flow,
+} from "../types/protocol";
 
+import { InstallSection } from "./install-section.client";
 import {
   InkColors,
   SchematicCard,
@@ -9,15 +21,13 @@ import {
   DimLine,
   Callout,
   Stamp,
-  CheckMark,
-  WobbleDefs,
   LeaderCaption,
 } from "./schematic";
 
 const ATLAS_LINK = "/";
 
-/* ───────────────────────── Atlas strip (top) ───────────────────────── */
-function AtlasStrip({ config }: any) {
+/* ───────────────────────── Atlas strip (top nav) ───────────────────────── */
+function AtlasStrip({ config }: { config: ProtocolConfig }) {
   return (
     <header
       style={{
@@ -29,7 +39,7 @@ function AtlasStrip({ config }: any) {
         gap: 16,
       }}
     >
-      <a
+      <Link
         href={ATLAS_LINK}
         style={{
           display: "inline-flex",
@@ -66,7 +76,7 @@ function AtlasStrip({ config }: any) {
         >
           Schematic Atlas
         </span>
-      </a>
+      </Link>
       <div
         style={{
           display: "flex",
@@ -80,9 +90,9 @@ function AtlasStrip({ config }: any) {
           color: InkColors.muted,
         }}
       >
-        <a href={ATLAS_LINK} style={{ color: InkColors.muted, textDecoration: "none" }}>
+        <Link href={ATLAS_LINK} style={{ color: InkColors.muted, textDecoration: "none" }}>
           ← catalog
-        </a>
+        </Link>
         {config.partTag && (
           <span
             style={{
@@ -101,7 +111,7 @@ function AtlasStrip({ config }: any) {
 }
 
 /* ───────────────────────── Title block ───────────────────────── */
-function TitleBlock({ config }: any) {
+function TitleBlock({ config }: { config: ProtocolConfig }) {
   const { name, purpose, highlight, repo, package: pkg, license } = config;
   const split =
     highlight && purpose && purpose.includes(highlight)
@@ -241,12 +251,12 @@ function TitleBlock({ config }: any) {
 }
 
 /* ───────────────────────── Stats row ───────────────────────── */
-function StatsRow({ stats }: any) {
+function StatsRow({ stats }: { stats?: [string, string?][] }) {
   if (!stats || stats.length === 0) return null;
   return (
     <section style={{ padding: "0 0 36px" }}>
       <div style={{ display: "flex", alignItems: "center", gap: 36, flexWrap: "wrap" }}>
-        {stats.map(([value, label]: any, i: number) => (
+        {stats.map(([value, label], i) => (
           <DimLine
             key={i}
             label={label ? `${value} · ${label}` : value}
@@ -260,7 +270,7 @@ function StatsRow({ stats }: any) {
 }
 
 /* ───────────────────────── Section header ───────────────────────── */
-function FigHeader({ n, title }: any) {
+export function FigHeader({ n, title }: { n: string | null; title: string }) {
   return (
     <div style={{ marginBottom: 28 }}>
       <div style={{ marginBottom: 6 }}>
@@ -295,7 +305,7 @@ function FigHeader({ n, title }: any) {
 }
 
 /* ───────────────────────── Flow step ───────────────────────── */
-function FlowStep({ step, last }: any) {
+function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
   const { n, name, args, body, question, branch } = step;
   return (
     <div
@@ -358,7 +368,7 @@ function FlowStep({ step, last }: any) {
 
       <div style={{ paddingTop: 4 }}>
         {branch && (
-          <React.Fragment>
+          <>
             <div style={{ position: "relative", height: 0 }}>
               <svg
                 width="40"
@@ -418,7 +428,7 @@ function FlowStep({ step, last }: any) {
                 </p>
               )}
             </SchematicCard>
-          </React.Fragment>
+          </>
         )}
       </div>
 
@@ -447,8 +457,8 @@ function FlowStep({ step, last }: any) {
 }
 
 /* ───────────────────────── Flow section ───────────────────────── */
-function FlowSection({ fig, flow }: any) {
-  if (!flow || !flow.steps || flow.steps.length === 0) return null;
+function FlowSection({ fig, flow }: { fig: string | null; flow: Flow }) {
+  if (!flow.steps || flow.steps.length === 0) return null;
   return (
     <section style={{ padding: "20px 0 60px", borderTop: `1px dashed ${InkColors.faint}` }}>
       <div style={{ paddingTop: 40 }}>
@@ -514,7 +524,7 @@ function FlowSection({ fig, flow }: any) {
         </div>
       )}
 
-      {flow.steps.map((s: any, i: number) => (
+      {flow.steps.map((s, i) => (
         <FlowStep key={i} step={s} last={i === flow.steps.length - 1} />
       ))}
     </section>
@@ -522,7 +532,7 @@ function FlowSection({ fig, flow }: any) {
 }
 
 /* ───────────────────────── Components / tools ───────────────────────── */
-function GroupCard({ group }: any) {
+function GroupCard({ group }: { group: Group }) {
   return (
     <SchematicCard partTag={`G.${group.key.slice(0, 3).toUpperCase()}`}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
@@ -587,7 +597,7 @@ function GroupCard({ group }: any) {
           paddingTop: 12,
         }}
       >
-        {group.items.map((t: any) => (
+        {group.items.map((t) => (
           <div
             key={t.name}
             style={{
@@ -627,7 +637,15 @@ function GroupCard({ group }: any) {
   );
 }
 
-function ComponentsSection({ fig, groups, tools }: any) {
+function ComponentsSection({
+  fig,
+  groups,
+  tools,
+}: {
+  fig: string | null;
+  groups?: Group[];
+  tools?: { name: string; sub?: string }[];
+}) {
   if ((!groups || groups.length === 0) && (!tools || tools.length === 0)) return null;
   return (
     <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
@@ -643,7 +661,7 @@ function ComponentsSection({ fig, groups, tools }: any) {
             gap: 24,
           }}
         >
-          {groups.map((g: any) => (
+          {groups.map((g) => (
             <GroupCard key={g.key} group={g} />
           ))}
         </div>
@@ -652,7 +670,7 @@ function ComponentsSection({ fig, groups, tools }: any) {
       {tools && tools.length > 0 && (
         <SchematicCard pad="20px 24px">
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 32px" }}>
-            {tools.map((t: any) => (
+            {tools.map((t) => (
               <div
                 key={t.name}
                 style={{
@@ -697,8 +715,8 @@ function ComponentsSection({ fig, groups, tools }: any) {
 }
 
 /* ───────────────────────── Notes / warnings ───────────────────────── */
-function NotesSection({ notes, fig }: any) {
-  if (!notes || notes.length === 0) return null;
+function NotesSection({ notes, fig }: { notes: Note[]; fig: string | null }) {
+  if (notes.length === 0) return null;
   return (
     <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
       <div style={{ paddingTop: 40 }}>
@@ -711,7 +729,7 @@ function NotesSection({ notes, fig }: any) {
           gap: 20,
         }}
       >
-        {notes.map((note: any, i: number) => (
+        {notes.map((note, i) => (
           <div key={i} style={{ position: "relative" }}>
             <div style={{ marginBottom: 8, marginLeft: 6 }}>
               <Stamp size="11px" color={InkColors.red} rotate={-2}>
@@ -720,7 +738,7 @@ function NotesSection({ notes, fig }: any) {
             </div>
             <SchematicCard pad="14px 18px" style={{ borderColor: InkColors.red, borderWidth: 1.5 }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
-                <Callout letter={String(note.n || i + 1)} size={26} color={InkColors.red} />
+                <Callout letter={String(note.n ?? i + 1)} size={26} color={InkColors.red} />
                 <p
                   style={{
                     fontFamily: "var(--font-hand)",
@@ -743,9 +761,9 @@ function NotesSection({ notes, fig }: any) {
 }
 
 /* ───────────────────────── Worked example ───────────────────────── */
-function WorkedExampleSection({ example, fig }: any) {
-  if (!example || !example.code) return null;
-  const captions = example.captions || [];
+function WorkedExampleSection({ example, fig }: { example: Example; fig: string | null }) {
+  if (!example.code) return null;
+  const captions = example.captions ?? [];
   return (
     <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
       <div style={{ paddingTop: 40 }}>
@@ -791,7 +809,7 @@ function WorkedExampleSection({ example, fig }: any) {
         </SchematicCard>
         {captions.length > 0 && (
           <div style={{ display: "flex", flexDirection: "column", gap: 18, paddingTop: 8 }}>
-            {captions.map((c: any, i: number) => (
+            {captions.map((c, i) => (
               <LeaderCaption key={i} letter={["i", "ii", "iii", "iv"][i] || String(i + 1)}>
                 {c}
               </LeaderCaption>
@@ -803,141 +821,8 @@ function WorkedExampleSection({ example, fig }: any) {
   );
 }
 
-/* ───────────────────────── Install / use ───────────────────────── */
-function InstallSection({ fig, config }: any) {
-  const { install, run, worksWith } = config;
-  const tabs = install ? Object.keys(install) : [];
-  const [activeTab, setActiveTab] = React.useState<string | null>(tabs[0] ?? null);
-  if (!install && !run && (!worksWith || worksWith.length === 0)) return null;
-  return (
-    <section style={{ padding: "20px 0 50px", borderTop: `1.5px solid ${InkColors.ink}` }}>
-      <div style={{ paddingTop: 40 }}>
-        <FigHeader n={fig} title="Install · use." />
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: install || run ? "8fr 4fr" : "1fr",
-          gap: 36,
-          alignItems: "start",
-        }}
-      >
-        <div>
-          {install && tabs.length > 0 && (
-            <React.Fragment>
-              <div style={{ display: "flex", marginBottom: -1.5, position: "relative", zIndex: 1 }}>
-                {tabs.map((k) => (
-                  <button
-                    key={k}
-                    onClick={() => setActiveTab(k)}
-                    style={{
-                      fontFamily: "var(--font-mono)",
-                      fontSize: 12,
-                      fontWeight: 600,
-                      letterSpacing: "0.10em",
-                      textTransform: "uppercase",
-                      border: `1.5px solid ${InkColors.ink}`,
-                      borderBottom:
-                        activeTab === k
-                          ? `1.5px solid var(--paper)`
-                          : `1.5px solid ${InkColors.ink}`,
-                      background: activeTab === k ? "var(--paper)" : "var(--paper-dim)",
-                      color: InkColors.ink,
-                      padding: "8px 14px",
-                      cursor: "pointer",
-                      marginRight: -1.5,
-                      position: "relative",
-                      zIndex: activeTab === k ? 2 : 1,
-                    }}
-                  >
-                    {k}
-                  </button>
-                ))}
-              </div>
-              <div
-                style={{
-                  border: `1.5px solid ${InkColors.ink}`,
-                  padding: "16px 20px",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 14,
-                  color: InkColors.ink,
-                  wordBreak: "break-word",
-                }}
-              >
-                <span style={{ color: InkColors.faint, marginRight: 8 }}>$</span>
-                {activeTab ? install[activeTab] : null}
-              </div>
-            </React.Fragment>
-          )}
-          {run && (
-            <div style={{ marginTop: install ? 20 : 0 }}>
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 11,
-                  fontWeight: 600,
-                  letterSpacing: "0.10em",
-                  textTransform: "uppercase",
-                  color: InkColors.faint,
-                }}
-              >
-                then run
-              </span>
-              <div
-                style={{
-                  border: `1.5px solid ${InkColors.ink}`,
-                  padding: "14px 20px",
-                  marginTop: 6,
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 13,
-                  color: InkColors.ink,
-                  wordBreak: "break-word",
-                }}
-              >
-                <span style={{ color: InkColors.faint, marginRight: 8 }}>$</span>
-                {run}
-              </div>
-            </div>
-          )}
-        </div>
-        {worksWith && worksWith.length > 0 && (
-          <div>
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.10em",
-                textTransform: "uppercase",
-                color: InkColors.faint,
-                display: "block",
-                marginBottom: 10,
-              }}
-            >
-              works with
-            </span>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {worksWith.map((x: string) => (
-                <div key={x} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <CheckMark size={14} />
-                  <span
-                    style={{ fontFamily: "var(--font-hand)", fontSize: 15, color: InkColors.ink }}
-                  >
-                    {x}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-    </section>
-  );
-}
-
 /* ───────────────────────── Footer ───────────────────────── */
-function ProtocolFooter({ config }: any) {
+function ProtocolFooter({ config }: { config: ProtocolConfig }) {
   return (
     <footer
       style={{
@@ -979,7 +864,7 @@ function ProtocolFooter({ config }: any) {
           </a>
         )}
       </div>
-      <a
+      <Link
         href={ATLAS_LINK}
         style={{
           display: "inline-flex",
@@ -994,15 +879,15 @@ function ProtocolFooter({ config }: any) {
           textDecoration: "none",
         }}
       >
-        <Icon name="arrow_right" size={14} style={{ transform: "rotate(180deg)" }} />
+        <Icon name="arrow_left" size={14} />
         back to atlas
-      </a>
+      </Link>
     </footer>
   );
 }
 
 /* ───────────────────────── Root ───────────────────────── */
-export function ProtocolRenderer({ config }: any) {
+export function ProtocolRenderer({ config }: { config: ProtocolConfig }) {
   const hasFlow = !!(config.flow && config.flow.steps && config.flow.steps.length > 0);
   const hasComponents = !!(
     (config.groups && config.groups.length) ||
@@ -1029,17 +914,16 @@ export function ProtocolRenderer({ config }: any) {
         background: "var(--paper)",
       }}
     >
-      <WobbleDefs />
       <AtlasStrip config={config} />
       <TitleBlock config={config} />
       <StatsRow stats={config.stats} />
 
-      {hasFlow && <FlowSection fig={flowFig} flow={config.flow} />}
+      {hasFlow && <FlowSection fig={flowFig} flow={config.flow!} />}
       {hasComponents && (
         <ComponentsSection fig={componentsFig} groups={config.groups} tools={config.tools} />
       )}
-      {hasNotes && <NotesSection notes={config.notes} fig={notesFig} />}
-      {hasExample && <WorkedExampleSection example={config.example} fig={exampleFig} />}
+      {hasNotes && <NotesSection notes={config.notes!} fig={notesFig} />}
+      {hasExample && <WorkedExampleSection example={config.example!} fig={exampleFig} />}
 
       <InstallSection fig={installFig} config={config} />
       <ProtocolFooter config={config} />

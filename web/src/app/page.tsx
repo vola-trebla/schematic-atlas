@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { PROTOCOLS } from "../data/protocols";
 import { SchematicCard, DimLine } from "../design-system/schematic";
+import type { Tool } from "../types/protocol";
 
 export default function Home() {
   const protocols = Object.values(PROTOCOLS);
@@ -54,7 +55,6 @@ export default function Home() {
           >
             <SchematicCard
               partTag={p.partTag}
-              title={p.name}
               shadow
               style={{ height: "100%", cursor: "pointer", transition: "transform 0.2s" }}
             >
@@ -80,7 +80,7 @@ export default function Home() {
               <div
                 style={{ display: "flex", gap: "var(--sp-2)", flexWrap: "wrap", marginTop: "auto" }}
               >
-                {(p.tools || []).slice(0, 3).map((t: any) => (
+                {(p.tools ?? []).slice(0, 3).map((t: Tool) => (
                   <span
                     key={t.name}
                     style={{
@@ -94,7 +94,7 @@ export default function Home() {
                     {t.name}
                   </span>
                 ))}
-                {(p.tools || []).length > 3 && (
+                {(p.tools ?? []).length > 3 && (
                   <span
                     style={{
                       fontFamily: "var(--font-mono)",
@@ -102,7 +102,7 @@ export default function Home() {
                       color: "var(--ink-muted)",
                     }}
                   >
-                    +{(p.tools || []).length - 3} more
+                    +{(p.tools ?? []).length - 3} more
                   </span>
                 )}
               </div>

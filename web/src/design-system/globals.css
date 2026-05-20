@@ -3,8 +3,7 @@
    Black gel pen on warm sketchbook paper. No gradients, no soft shadows.
    ========================================================================= */
 
-/* ---- Fonts (Google Fonts substitution — see README) ---- */
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Architects+Daughter&family=JetBrains+Mono:wght@400;500;600;700&family=Special+Elite&display=swap");
+/* Fonts loaded via <link> in app/layout.tsx — not duplicated here. */
 
 :root {
   /* ---------- PAPER (backgrounds) ---------- */
