@@ -6,7 +6,7 @@
     "web"
   ],
   "scripts": {
-    "prepare": "husky",
+    "prepare": "is-ci || husky",
     "dev": "npm run dev --workspace=web",
     "build": "npm run build --workspace=web",
     "lint": "npm run lint --workspace=web",
@@ -16,7 +16,8 @@
     "@typescript-eslint/eslint-plugin": "^8.59.4",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.5",
+    "is-ci": "^4.1.0",
+    "lint-staged": "^15.5.2",
     "prettier": "^3.8.3"
   },
   "lint-staged": {
