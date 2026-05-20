@@ -29,3 +29,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+
+# Internal / AI assistant files
+CLAUDE.md
+REVIEW.md
+mcp_atlas_concept_roadmap_md.md
+web/CLAUDE.md
+web/AGENTS.md
+Schematic Design System/SKILL.md
