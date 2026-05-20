@@ -77,31 +77,12 @@ function AtlasStrip({ config }: { config: ProtocolConfig }) {
           Schematic Atlas
         </span>
       </Link>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 14,
-          fontFamily: "var(--font-mono)",
-          fontSize: 11,
-          fontWeight: 600,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: InkColors.muted,
-        }}
-      >
+      <div className="fig-label" style={{ display: "flex", alignItems: "center", gap: 14 }}>
         <Link href={ATLAS_LINK} style={{ color: InkColors.muted, textDecoration: "none" }}>
           ← catalog
         </Link>
         {config.partTag && (
-          <span
-            style={{
-              color: InkColors.ink,
-              border: `1.4px solid ${InkColors.ink}`,
-              padding: "2px 6px",
-              background: "var(--paper-bright)",
-            }}
-          >
+          <span className="meta-badge" style={{ border: `1.4px solid ${InkColors.ink}` }}>
             [{config.partTag}]
           </span>
         )}
@@ -128,31 +109,10 @@ function TitleBlock({ config }: { config: ProtocolConfig }) {
           transformOrigin: "left top",
         }}
       >
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: InkColors.faint,
-          }}
-        >
-          atlas entry
-        </span>
+        <span className="fig-label">atlas entry</span>
       </span>
 
-      <span
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 12,
-          fontWeight: 600,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: InkColors.blue,
-        }}
-      >
-        {"// protocol"}
-      </span>
+      <span className="proto-kicker">{"// protocol"}</span>
 
       <h1
         style={{
@@ -180,34 +140,12 @@ function TitleBlock({ config }: { config: ProtocolConfig }) {
         }}
       >
         {split[0]}
-        {highlight && (
-          <span
-            style={{
-              display: "inline",
-              padding: "0 0.06em",
-              background:
-                "linear-gradient(transparent 28%, rgba(242,217,87,0.78) 28%, rgba(242,217,87,0.78) 86%, transparent 86%)",
-            }}
-          >
-            {highlight}
-          </span>
-        )}
+        {highlight && <mark>{highlight}</mark>}
         {split[1]}
       </p>
 
       {(repo || pkg || license) && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 22,
-            fontFamily: "var(--font-mono)",
-            fontSize: 12,
-            color: InkColors.muted,
-            letterSpacing: "0.04em",
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="meta-row">
           {repo && (
             <a
               href={repo}
@@ -215,7 +153,6 @@ function TitleBlock({ config }: { config: ProtocolConfig }) {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 7,
-                color: InkColors.ink,
                 textDecoration: "none",
               }}
             >
@@ -229,21 +166,7 @@ function TitleBlock({ config }: { config: ProtocolConfig }) {
               {pkg}
             </span>
           )}
-          {license && (
-            <span
-              style={{
-                fontWeight: 600,
-                letterSpacing: "0.10em",
-                textTransform: "uppercase",
-                color: InkColors.ink,
-                border: `1.2px solid ${InkColors.ink}`,
-                padding: "1px 6px",
-                background: "var(--paper-bright)",
-              }}
-            >
-              {license}
-            </span>
-          )}
+          {license && <span className="meta-badge">{license}</span>}
         </div>
       )}
     </section>
@@ -274,32 +197,9 @@ export function FigHeader({ n, title }: { n: string | null; title: string }) {
   return (
     <div style={{ marginBottom: 28 }}>
       <div style={{ marginBottom: 6 }}>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            fontWeight: 600,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: InkColors.faint,
-            whiteSpace: "nowrap",
-          }}
-        >
-          fig. {n}
-        </span>
+        <span className="fig-label">fig. {n}</span>
       </div>
-      <h2
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: 40,
-          fontWeight: 600,
-          lineHeight: 1.05,
-          margin: 0,
-          color: InkColors.ink,
-        }}
-      >
-        {title}
-      </h2>
+      <h2 className="fig-title">{title}</h2>
     </div>
   );
 }
@@ -323,47 +223,21 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
 
       <SchematicCard partTag={`S.${String(n).padStart(2, "0")}`} pad="14px 18px 14px">
         <div
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 16,
-            fontWeight: 600,
-            color: InkColors.ink,
-            lineHeight: 1.25,
-            wordBreak: "break-word",
-          }}
+          className="tool-name"
+          style={{ fontSize: 16, lineHeight: 1.25, wordBreak: "break-word" }}
         >
           {name}
           {args && <span style={{ fontWeight: 400, color: InkColors.muted }}>({args})</span>}
         </div>
         {body && (
-          <p
-            style={{
-              fontFamily: "var(--font-hand)",
-              fontSize: 14,
-              lineHeight: 1.45,
-              color: InkColors.ink,
-              margin: "6px 0 0",
-            }}
-          >
+          <p className="card-body" style={{ margin: "6px 0 0" }}>
             {body}
           </p>
         )}
       </SchematicCard>
 
       <div style={{ paddingTop: 22 }}>
-        {question && (
-          <span
-            style={{
-              fontFamily: "var(--font-hand)",
-              fontStyle: "italic",
-              fontSize: 15,
-              color: InkColors.blue,
-              lineHeight: 1.4,
-            }}
-          >
-            {question}
-          </span>
-        )}
+        {question && <span className="step-question">{question}</span>}
       </div>
 
       <div style={{ paddingTop: 4 }}>
@@ -401,11 +275,9 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <Callout letter={String(branch.n)} size={24} color={InkColors.red} />
                 <span
+                  className="tool-name"
                   style={{
-                    fontFamily: "var(--font-mono)",
                     fontSize: 12,
-                    fontWeight: 600,
-                    color: InkColors.ink,
                     lineHeight: 1.2,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
@@ -415,15 +287,7 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
                 </span>
               </div>
               {branch.body && (
-                <p
-                  style={{
-                    fontFamily: "var(--font-hand)",
-                    fontSize: 13,
-                    lineHeight: 1.45,
-                    color: InkColors.ink,
-                    margin: "8px 0 0",
-                  }}
-                >
+                <p className="card-body" style={{ margin: "8px 0 0", fontSize: 13 }}>
                   {branch.body}
                 </p>
               )}
@@ -460,7 +324,7 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
 function FlowSection({ fig, flow }: { fig: string | null; flow: Flow }) {
   if (!flow.steps || flow.steps.length === 0) return null;
   return (
-    <section style={{ padding: "20px 0 60px", borderTop: `1px dashed ${InkColors.faint}` }}>
+    <section className="section-dashed">
       <div style={{ paddingTop: 40 }}>
         <FigHeader n={fig} title="The flow." />
       </div>
@@ -494,14 +358,7 @@ function FlowSection({ fig, flow }: { fig: string | null; flow: Flow }) {
                 {flow.input.label}
               </span>
               {flow.input.sub && (
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 11,
-                    color: InkColors.muted,
-                    letterSpacing: "0.04em",
-                  }}
-                >
+                <span className="fig-label" style={{ letterSpacing: "0.04em" }}>
                   {flow.input.sub}
                 </span>
               )}
@@ -563,28 +420,14 @@ function GroupCard({ group }: { group: Group }) {
           {group.title}
         </div>
         <div
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            color: InkColors.muted,
-            letterSpacing: "0.04em",
-            marginLeft: "auto",
-            whiteSpace: "nowrap",
-          }}
+          className="fig-label"
+          style={{ letterSpacing: "0.04em", marginLeft: "auto", whiteSpace: "nowrap" }}
         >
           {group.items.length} {group.items.length === 1 ? "tool" : "tools"}
         </div>
       </div>
       {group.blurb && (
-        <p
-          style={{
-            fontFamily: "var(--font-hand)",
-            fontSize: 14,
-            lineHeight: 1.45,
-            color: InkColors.ink,
-            margin: "0 0 12px",
-          }}
-        >
+        <p className="card-body" style={{ margin: "0 0 12px" }}>
           {group.blurb}
         </p>
       )}
@@ -607,29 +450,8 @@ function GroupCard({ group }: { group: Group }) {
               alignItems: "baseline",
             }}
           >
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 13,
-                color: InkColors.ink,
-                fontWeight: 500,
-              }}
-            >
-              {t.name}
-            </span>
-            {t.sub && (
-              <span
-                style={{
-                  fontFamily: "var(--font-hand)",
-                  fontStyle: "italic",
-                  fontSize: 13,
-                  color: InkColors.blue,
-                  lineHeight: 1.35,
-                }}
-              >
-                — {t.sub}
-              </span>
-            )}
+            <span className="tool-name">{t.name}</span>
+            {t.sub && <span className="tool-sub">— {t.sub}</span>}
           </div>
         ))}
       </div>
@@ -648,7 +470,7 @@ function ComponentsSection({
 }) {
   if ((!groups || groups.length === 0) && (!tools || tools.length === 0)) return null;
   return (
-    <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
+    <section className="section-rule">
       <div style={{ paddingTop: 40 }}>
         <FigHeader n={fig} title={groups ? "Components, grouped." : "Components."} />
       </div>
@@ -682,29 +504,8 @@ function ComponentsSection({
                   borderBottom: `1px dashed ${InkColors.faint}`,
                 }}
               >
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 13,
-                    color: InkColors.ink,
-                    fontWeight: 500,
-                  }}
-                >
-                  {t.name}
-                </span>
-                {t.sub && (
-                  <span
-                    style={{
-                      fontFamily: "var(--font-hand)",
-                      fontStyle: "italic",
-                      fontSize: 13,
-                      color: InkColors.blue,
-                      lineHeight: 1.35,
-                    }}
-                  >
-                    — {t.sub}
-                  </span>
-                )}
+                <span className="tool-name">{t.name}</span>
+                {t.sub && <span className="tool-sub">— {t.sub}</span>}
               </div>
             ))}
           </div>
@@ -718,7 +519,7 @@ function ComponentsSection({
 function NotesSection({ notes, fig }: { notes: Note[]; fig: string | null }) {
   if (notes.length === 0) return null;
   return (
-    <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
+    <section className="section-rule">
       <div style={{ paddingTop: 40 }}>
         <FigHeader n={fig} title="Notes." />
       </div>
@@ -739,16 +540,7 @@ function NotesSection({ notes, fig }: { notes: Note[]; fig: string | null }) {
             <SchematicCard pad="14px 18px" style={{ borderColor: InkColors.red, borderWidth: 1.5 }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                 <Callout letter={String(note.n ?? i + 1)} size={26} color={InkColors.red} />
-                <p
-                  style={{
-                    fontFamily: "var(--font-hand)",
-                    fontSize: 15,
-                    lineHeight: 1.45,
-                    color: InkColors.ink,
-                    margin: "2px 0 0",
-                    flex: 1,
-                  }}
-                >
+                <p className="card-body" style={{ fontSize: 15, margin: "2px 0 0", flex: 1 }}>
                   {note.body}
                 </p>
               </div>
@@ -765,7 +557,7 @@ function WorkedExampleSection({ example, fig }: { example: Example; fig: string 
   if (!example.code) return null;
   const captions = example.captions ?? [];
   return (
-    <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
+    <section className="section-rule">
       <div style={{ paddingTop: 40 }}>
         <FigHeader n={fig} title="Worked example." />
       </div>
@@ -780,15 +572,8 @@ function WorkedExampleSection({ example, fig }: { example: Example; fig: string 
         <SchematicCard pad="20px 24px">
           {example.lang && (
             <div
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 10,
-                fontWeight: 600,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: InkColors.muted,
-                marginBottom: 10,
-              }}
+              className="fig-label"
+              style={{ letterSpacing: "0.18em", marginBottom: 10, fontSize: 10 }}
             >
               {example.lang}
             </div>
@@ -837,15 +622,7 @@ function ProtocolFooter({ config }: { config: ProtocolConfig }) {
       }}
     >
       <div>
-        <div
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            letterSpacing: "0.10em",
-            textTransform: "uppercase",
-            color: InkColors.muted,
-          }}
-        >
+        <div className="fig-label" style={{ letterSpacing: "0.10em" }}>
           {config.license || "open source"} · atlas entry · drawn by hand, mostly
         </div>
         {config.repo && (
@@ -904,16 +681,10 @@ export function ProtocolRenderer({ config }: { config: ProtocolConfig }) {
   const installFig = String(++n);
 
   return (
-    <div
-      className="page-shell"
-      style={{
-        maxWidth: "1180px",
-        margin: "0 auto",
-        padding: "0 84px",
-        position: "relative",
-        background: "var(--paper)",
-      }}
-    >
+    <div className="page-shell">
+      <span className="margin-rule" style={{ left: "36px" }} />
+      <span className="margin-rule" style={{ right: "36px" }} />
+
       <AtlasStrip config={config} />
       <TitleBlock config={config} />
       <StatsRow stats={config.stats} />
@@ -927,29 +698,6 @@ export function ProtocolRenderer({ config }: { config: ProtocolConfig }) {
 
       <InstallSection fig={installFig} config={config} />
       <ProtocolFooter config={config} />
-
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          left: "36px",
-          width: "1px",
-          background: "rgba(21,22,27,0.10)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          bottom: 0,
-          right: "36px",
-          width: "1px",
-          background: "rgba(21,22,27,0.10)",
-          pointerEvents: "none",
-        }}
-      />
     </div>
   );
 }

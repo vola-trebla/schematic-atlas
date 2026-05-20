@@ -486,3 +486,127 @@ mark,
 .wobble {
   filter: url(#wobble);
 }
+
+/* =========================================================================
+   RENDERER UTILITIES
+   ========================================================================= */
+
+/* Fig-label: "fig. 1" / "atlas entry" overline text */
+.fig-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-stamp);
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
+/* Protocol annotation: "// protocol" kicker above title */
+.proto-kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: var(--ls-stamp);
+  text-transform: uppercase;
+  color: var(--ink-blue);
+}
+
+/* Fig-title: the large Caveat heading under fig-label */
+.fig-title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 600;
+  line-height: 1.05;
+  margin: 0;
+  color: var(--ink);
+}
+
+/* Inline prose inside cards (body-sm) */
+.card-body {
+  font-family: var(--font-hand);
+  font-size: var(--fs-caption);
+  line-height: var(--lh-mono);
+  color: var(--ink);
+  margin: 0;
+}
+
+/* Italic blue question / annotation beside a flow step */
+.step-question {
+  font-family: var(--font-hand);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-blue);
+  line-height: 1.4;
+}
+
+/* Mono tool name in tool/group lists */
+.tool-name {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+/* Italic hand sub-description beside a tool name */
+.tool-sub {
+  font-family: var(--font-hand);
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-blue);
+  line-height: 1.35;
+}
+
+/* Mono meta row (repo · package · license) */
+.meta-row {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-muted);
+  letter-spacing: 0.04em;
+  flex-wrap: wrap;
+}
+
+/* Inline license badge / part-tag in meta row */
+.meta-badge {
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1.2px solid var(--ink);
+  padding: 1px 6px;
+  background: var(--paper-bright);
+}
+
+/* Section divider — dashed top border used for flow section */
+.section-dashed {
+  padding: 20px 0 60px;
+  border-top: 1px dashed var(--ink-faint);
+}
+
+/* Section divider — solid top border used for components / notes / example */
+.section-rule {
+  padding: 20px 0 60px;
+  border-top: var(--stroke-rule) solid var(--ink);
+}
+
+/* Page shell */
+.page-shell {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  position: relative;
+  background: var(--paper);
+}
+
+/* Vertical margin rule (left/right page gutters) */
+.margin-rule {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(21, 22, 27, 0.1);
+  pointer-events: none;
+}
