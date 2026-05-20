@@ -205,22 +205,54 @@ export function FigHeader({ n, title }: { n: string | null; title: string }) {
 }
 
 /* ───────────────────────── Flow step ───────────────────────── */
+/*
+ * Grid: [num 44px] [card 1fr] [question 180px] [arrow 40px] [branch 1fr]
+ * The branch arrow lives in col 4 — no magic absolute offsets.
+ * When there is no branch, cols 4+5 are empty and collapse visually.
+ */
+const FLOW_GRID = "44px 1fr 180px 40px 1fr";
+
+function BranchArrow() {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingTop: 46,
+        height: "100%",
+      }}
+    >
+      <svg width="40" height="16" viewBox="0 0 40 16" fill="none" stroke={InkColors.faint}>
+        <path d="M 0 8 L 30 8" strokeWidth="1.2" strokeLinecap="round" strokeDasharray="5 4" />
+        <path
+          d="M 25 3 L 35 8 L 25 13"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
 function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
   const { n, name, args, body, question, branch } = step;
   return (
     <div
       style={{
-        position: "relative",
         display: "grid",
-        gridTemplateColumns: "44px 1fr 180px 280px",
+        gridTemplateColumns: FLOW_GRID,
         gap: 20,
         alignItems: "start",
       }}
     >
+      {/* col 1 — step number */}
       <div style={{ display: "flex", justifyContent: "center", paddingTop: 14 }}>
         <Callout letter={String(n)} size={34} />
       </div>
 
+      {/* col 2 — main card */}
       <SchematicCard partTag={`S.${String(n).padStart(2, "0")}`} pad="14px 18px 14px">
         <div
           className="tool-name"
@@ -236,36 +268,18 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
         )}
       </SchematicCard>
 
+      {/* col 3 — italic question annotation */}
       <div style={{ paddingTop: 22 }}>
         {question && <span className="step-question">{question}</span>}
       </div>
 
+      {/* col 4 — branch connector arrow (empty when no branch) */}
+      {branch ? <BranchArrow /> : <div />}
+
+      {/* col 5 — branch card (empty when no branch) */}
       <div style={{ paddingTop: 4 }}>
         {branch && (
           <>
-            <div style={{ position: "relative", height: 0 }}>
-              <svg
-                width="40"
-                height="24"
-                viewBox="0 0 40 24"
-                fill="none"
-                stroke={InkColors.faint}
-                style={{ position: "absolute", left: -44, top: 32 }}
-              >
-                <path
-                  d="M 0 12 L 30 12"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeDasharray="5 4"
-                />
-                <path
-                  d="M 25 7 L 35 12 L 25 17"
-                  strokeWidth="1.2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
             <div style={{ marginBottom: 6 }}>
               <Stamp size="11px" color={InkColors.red} rotate={-2}>
                 {branch.condition}
@@ -296,6 +310,7 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
         )}
       </div>
 
+      {/* down-arrow between steps — spans col 2 only */}
       {!last && (
         <div
           style={{
@@ -333,7 +348,7 @@ function FlowSection({ fig, flow }: { fig: string | null; flow: Flow }) {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "44px 1fr 180px 280px",
+            gridTemplateColumns: FLOW_GRID,
             gap: 20,
             alignItems: "center",
             marginBottom: 20,
@@ -364,19 +379,30 @@ function FlowSection({ fig, flow }: { fig: string | null; flow: Flow }) {
               )}
             </div>
           </SchematicCard>
+          {/* cols 3–5 empty, then down-arrow spans col 1–5 but sits under col 2 */}
           <div />
           <div />
           <div />
-          <div style={{ display: "flex", justifyContent: "center", padding: "8px 0" }}>
-            <svg width="14" height="36" viewBox="0 0 14 36" fill="none" stroke={InkColors.ink}>
-              <line x1="7" y1="0" x2="7" y2="28" strokeWidth="1.6" strokeLinecap="round" />
-              <path
-                d="M 2 23 L 7 32 L 12 23"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+          <div
+            style={{
+              gridColumn: "1 / 6",
+              display: "grid",
+              gridTemplateColumns: FLOW_GRID,
+              gap: 20,
+            }}
+          >
+            <div />
+            <div style={{ display: "flex", justifyContent: "center", padding: "8px 0" }}>
+              <svg width="14" height="36" viewBox="0 0 14 36" fill="none" stroke={InkColors.ink}>
+                <line x1="7" y1="0" x2="7" y2="28" strokeWidth="1.6" strokeLinecap="round" />
+                <path
+                  d="M 2 23 L 7 32 L 12 23"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
           </div>
         </div>
       )}
