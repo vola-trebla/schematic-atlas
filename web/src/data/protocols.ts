@@ -14,8 +14,7 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
     license: "MIT",
     stats: [
       ["2", "MCP tools"],
-      ["30+", "clients"],
-      ["MIT", "license"],
+      ["2-step", "flow"],
     ],
     flow: {
       input: {
@@ -348,7 +347,6 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
       ["2", "MCP tools"],
       ["0", "dependencies"],
       ["5", "databases"],
-      ["2.8k", "stars"],
     ],
     flow: {
       input: {
