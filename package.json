@@ -23,7 +23,7 @@
   "lint-staged": {
     "web/src/**/*.{ts,tsx}": [
       "prettier --write",
-      "eslint --fix"
+      "eslint --fix --config web/eslint.config.mjs"
     ],
     "web/src/**/*.{css,json}": [
       "prettier --write"
