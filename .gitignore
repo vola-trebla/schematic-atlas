@@ -1,4 +1,9 @@
 node_modules/
+**/node_modules/
+
+# Tool / agent runtime dirs
+.claude/
+.playwright-mcp/
 
 # Next.js
 web/.next/
