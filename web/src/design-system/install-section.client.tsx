@@ -19,37 +19,13 @@ export function InstallSection({ fig, config }: InstallSectionProps) {
   if (!install && !run && (!worksWith || worksWith.length === 0)) return null;
 
   return (
-    <section style={{ padding: "20px 0 50px", borderTop: `1.5px solid ${InkColors.ink}` }}>
+    <section className="section-rule">
       <div style={{ paddingTop: 40 }}>
-        {/* fig header inline — avoids circular import with protocol-renderer */}
         <div style={{ marginBottom: 28 }}>
           <div style={{ marginBottom: 6 }}>
-            <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-                color: InkColors.faint,
-                whiteSpace: "nowrap",
-              }}
-            >
-              fig. {fig}
-            </span>
+            <span className="fig-label">fig. {fig}</span>
           </div>
-          <h2
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 40,
-              fontWeight: 600,
-              lineHeight: 1.05,
-              margin: 0,
-              color: InkColors.ink,
-            }}
-          >
-            Install · use.
-          </h2>
+          <h2 className="fig-title">Install · use.</h2>
         </div>
       </div>
 
@@ -110,16 +86,7 @@ export function InstallSection({ fig, config }: InstallSectionProps) {
           )}
           {run && (
             <div style={{ marginTop: install ? 20 : 0 }}>
-              <span
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 11,
-                  fontWeight: 600,
-                  letterSpacing: "0.10em",
-                  textTransform: "uppercase",
-                  color: InkColors.faint,
-                }}
-              >
+              <span className="fig-label" style={{ letterSpacing: "0.10em" }}>
                 then run
               </span>
               <div
@@ -142,16 +109,8 @@ export function InstallSection({ fig, config }: InstallSectionProps) {
         {worksWith && worksWith.length > 0 && (
           <div>
             <span
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 11,
-                fontWeight: 600,
-                letterSpacing: "0.10em",
-                textTransform: "uppercase",
-                color: InkColors.faint,
-                display: "block",
-                marginBottom: 10,
-              }}
+              className="fig-label"
+              style={{ letterSpacing: "0.10em", display: "block", marginBottom: 10 }}
             >
               works with
             </span>
