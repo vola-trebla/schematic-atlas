@@ -51,7 +51,7 @@ function AtlasHeader() {
           <path d="M12 14 C 30 14, 38 14, 46 18 C 54 22, 54 32, 46 36 C 38 40, 26 40, 18 44 C 10 48, 10 56, 22 56 L 50 56" />
           <path d="M50 56 L 44 52 M 50 56 L 44 60" strokeWidth="2" />
         </svg>
-        <span
+        <h1
           style={{
             fontFamily: "var(--font-display)",
             fontSize: 42,
@@ -60,10 +60,11 @@ function AtlasHeader() {
             color: InkColors.ink,
             paddingRight: 4,
             whiteSpace: "nowrap",
+            margin: 0,
           }}
         >
           Schematic Atlas
-        </span>
+        </h1>
       </div>
       <span
         style={{
@@ -163,6 +164,8 @@ function CategoryFilter({
 
   return (
     <div
+      role="group"
+      aria-label="Filter by category"
       style={{
         display: "flex",
         alignItems: "center",
@@ -192,6 +195,7 @@ function CategoryFilter({
           <button
             key={c.key}
             onClick={() => onSelect(c.key)}
+            aria-pressed={isActive}
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -289,6 +293,7 @@ function EntryCard({ entry }: { entry: CatalogEntry }) {
   return (
     <Link
       href={`/${entry.slug}`}
+      aria-label={`${entry.name} — ${entry.purpose}`}
       style={{
         position: "relative",
         display: "block",
@@ -491,7 +496,7 @@ export function AtlasCatalog({ protocols }: { protocols: Record<string, Protocol
       <AtlasHeader />
       <Intro count={entries.length} />
       <CategoryFilter active={active} onSelect={setActive} counts={counts} />
-      <section style={{ padding: "32px 0 8px" }}>
+      <section aria-label="Protocol entries" style={{ padding: "32px 0 8px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
           {visible.map((e) => (
             <EntryCard key={e.slug} entry={e} />
