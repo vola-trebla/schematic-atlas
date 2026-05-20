@@ -285,7 +285,10 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
                 {branch.condition}
               </Stamp>
             </div>
-            <SchematicCard pad="12px 14px" style={{ borderColor: InkColors.red, borderWidth: 1.4 }}>
+            <SchematicCard
+              pad="12px 14px"
+              style={{ borderColor: InkColors.red, borderWidth: 1.4, borderStyle: "dashed" }}
+            >
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                 <Callout letter={String(branch.n)} size={24} color={InkColors.red} />
                 <span
@@ -563,7 +566,10 @@ function NotesSection({ notes, fig }: { notes: Note[]; fig: string | null }) {
                 {note.condition || "note"}
               </Stamp>
             </div>
-            <SchematicCard pad="14px 18px" style={{ borderColor: InkColors.red, borderWidth: 1.5 }}>
+            <SchematicCard
+              pad="14px 18px"
+              style={{ borderColor: InkColors.red, borderWidth: 1.5, borderStyle: "dashed" }}
+            >
               <div style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                 <Callout letter={String(note.n ?? i + 1)} size={26} color={InkColors.red} />
                 <p className="card-body" style={{ fontSize: 15, margin: "2px 0 0", flex: 1 }}>
