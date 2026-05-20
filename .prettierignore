@@ -3,6 +3,6 @@ web/node_modules
 web/.next
 web/out
 web/next-env.d.ts
-Schematic Design System/archive
-Schematic Design System/scraps
-Schematic Design System/uploads
+design-system/archive
+design-system/scraps
+design-system/uploads

@@ -31,7 +31,7 @@ The atlas is the product. Not isolated landing pages — a unified visual catalo
 ## Repo layout
 
 ```
-Schematic Design System/   ← design prototype (source of visual language)
+design-system/   ← design prototype (source of visual language)
   assets/schematic.jsx       motif library — DimLine, Callout, Stamp, Icon, …
   catalog/atlas.jsx          catalog grid (reference implementation)
   templates/                 protocol-page renderer + enricher CLI
@@ -67,7 +67,7 @@ Open [http://localhost:3000](http://localhost:3000).
 2. Required fields: `name`, `purpose`, `category`, `nodes` (3-label thumbnail).
 3. The renderer picks up the entry automatically — no other changes needed.
 
-For a fuller config (flow diagram, components, install), see the locked schema in `web/src/types/protocol.ts` and the worked examples in `Schematic Design System/templates/examples/`.
+For a fuller config (flow diagram, components, install), see the locked schema in `web/src/types/protocol.ts` and the worked examples in `design-system/templates/examples/`.
 
 ---
 
