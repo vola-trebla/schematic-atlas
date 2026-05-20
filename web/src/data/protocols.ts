@@ -3,6 +3,7 @@ import type { ProtocolConfig } from "../types/protocol";
 export const PROTOCOLS: Record<string, ProtocolConfig> = {
   context7: {
     name: "context7",
+    partTag: "CTX7",
     category: "documentation",
     nodes: ["library name", "context7", "LLM context"],
     purpose:
@@ -71,7 +72,7 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
   },
   "env-secret-exposure-analyzer": {
     name: "env-secret-exposure-analyzer",
-    partTag: "S.02",
+    partTag: "ESEA",
     category: "security",
     nodes: ["repo", "analyzer", "findings"],
     purpose:
@@ -133,7 +134,7 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
   },
   "playwright-trace-decoder": {
     name: "playwright-trace-decoder",
-    partTag: "T.04",
+    partTag: "TRACE",
     category: "testing",
     nodes: ["trace.zip", "decoder", "agent"],
     purpose:
@@ -277,7 +278,7 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
   },
   "mcp-grep": {
     name: "mcp-grep",
-    partTag: "T.01",
+    partTag: "GREP",
     category: "search",
     nodes: ["query", "shim", "ripgrep"],
     purpose:
@@ -334,7 +335,7 @@ export const PROTOCOLS: Record<string, ProtocolConfig> = {
   },
   dbhub: {
     name: "dbhub",
-    partTag: "P.01",
+    partTag: "DBHUB",
     category: "persistence",
     nodes: ["agent", "dbhub", "database"],
     purpose:

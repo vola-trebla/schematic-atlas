@@ -6,7 +6,7 @@
 const ATLAS = [
   {
     name: "playwright-trace-decoder",
-    partTag: "T.04",
+    partTag: "TRACE",
     purpose: "An MCP server that turns Playwright trace.zip into structured signal for AI-driven failure analysis.",
     href: "../templates/examples/playwright-trace-decoder.html",
     category: "debugging",
@@ -17,7 +17,7 @@ const ATLAS = [
   },
   {
     name: "mcp-grep",
-    partTag: "T.01",
+    partTag: "GREP",
     purpose: "Sub-millisecond grep as an MCP server, with glob-aware filtering and streaming matches.",
     href: "../templates/examples/mcp-grep.html",
     category: "search",
@@ -28,7 +28,7 @@ const ATLAS = [
   },
   {
     name: "mcp-orchestrator",
-    partTag: "T.02",
+    partTag: "ORCH",
     purpose: "Mounts N upstream MCP servers behind a single composite, with namespacing and crash isolation.",
     href: "../templates/examples/mcp-orchestrator.html",
     category: "orchestration",
@@ -39,7 +39,7 @@ const ATLAS = [
   },
   {
     name: "mcp-bench",
-    partTag: "T.03",
+    partTag: "BENCH",
     purpose: "Reproducible benchmarks for MCP servers \u2014 record a scenario, replay, diff two runs.",
     href: "../templates/examples/mcp-bench.html",
     category: "benchmarking",
@@ -50,7 +50,7 @@ const ATLAS = [
   },
   {
     name: "env-secret-exposure-analyzer",
-    partTag: "T.05",
+    partTag: "ESEA",
     purpose: "Scans repositories and runtime environments for accidentally exposed secrets such as .env files, hardcoded API keys, and leaked tokens.",
     href: "../templates/examples/env-secret-exposure-analyzer.html",
     category: "security",

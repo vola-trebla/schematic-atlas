@@ -81,7 +81,7 @@ export type Example = {
 export type ProtocolConfig = {
   // ── Identity ──────────────────────────────────────────────────────
   name: string;
-  /** Corner tag in [X.00] format (e.g. "T.04"). Optional — context7 has none. */
+  /** Ticker-style corner tag (e.g. "TRACE", "CTX7", "GREP"). Optional. */
   partTag?: string;
   purpose: string;
   /** Substring of `purpose` to highlight. At most one per page. */
