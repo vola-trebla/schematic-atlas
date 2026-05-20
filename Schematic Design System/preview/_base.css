@@ -1,0 +1,99 @@
+/* Preview-card base — Shared by every card in preview/.
+   Each card is a single rendered surface (no titles — name renders outside).
+   Target ~700×150, max ~400 tall.
+*/
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-hand);
+  -webkit-font-smoothing: antialiased;
+}
+
+body.card-pad {
+  padding: 24px 28px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.row-tight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.swatch {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.swatch .chip {
+  width: 100%;
+  height: 64px;
+  border: 1.5px solid var(--ink);
+}
+
+.swatch .name {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+  line-height: 1.1;
+}
+
+.swatch .hex {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
+}
+
+.swatch .var {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-blue);
+  letter-spacing: 0.02em;
+}
+
+.grid-swatches {
+  display: grid;
+  gap: 12px;
+}
+
+.label-row {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.specimen {
+  font-family: var(--font-display);
+  color: var(--ink);
+  line-height: 1.0;
+}
+
+.dim-tick {
+  stroke: var(--ink);
+  stroke-width: 1.2;
+  fill: none;
+}

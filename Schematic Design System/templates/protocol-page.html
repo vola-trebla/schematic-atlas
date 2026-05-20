@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>{name} — Schematic Atlas</title>
+<link rel="stylesheet" href="../../colors_and_type.css" />
+<style>
+  body { margin: 0; min-height: 100vh; background: var(--paper); }
+  .page-shell {
+    max-width: 1180px; margin: 0 auto; padding: 0 84px;
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(20,18,12,0.04) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 70% 65%, rgba(20,18,12,0.03) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 50% 80%, rgba(20,18,12,0.03) 0 1px, transparent 1.5px);
+    background-size: 7px 7px, 11px 11px, 13px 13px;
+    position: relative;
+  }
+  .page-shell::before, .page-shell::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 1px;
+    background: rgba(21,22,27,0.10); pointer-events: none;
+  }
+  .page-shell::before { left: 36px; }
+  .page-shell::after  { right: 36px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script>
+/* ──────────────────────────────────────────────────────────────────────────
+   Schematic Atlas — protocol page scaffold.
+   Copy this file, edit the CONFIG below. The renderer (protocol-page.jsx)
+   does the rest. Every field is optional except `name` and `purpose`.
+   See templates/README.md for the full schema reference.
+   ────────────────────────────────────────────────────────────────────────── */
+const CONFIG = {
+  // ── identity ─────────────────────────────────────
+  name: "your-mcp-tool",
+  partTag: "T.00",
+  purpose: "One-sentence description of what this protocol does, written dry and technical.",
+  highlight: "what this protocol does",   // optional substring to highlighter
+  repo: "https://github.com/your/repo",
+  package: "your-mcp-tool",
+  license: "MIT",
+
+  // ── key stats (0–4) ──────────────────────────────
+  stats: [
+    ["XX", "tools"],
+    ["XX ms", "p50"],
+  ],
+
+  // ── the flow (centerpiece) ──────────────────────
+  // Strongly preferred. Omit entirely if the protocol has no meaningful flow.
+  flow: {
+    input: { label: "input", sub: "← what arrives" },
+    steps: [
+      {
+        n: 1,
+        name: "step_one",
+        args: "arg_a, arg_b?",
+        body: "What this step does and what it returns. One paragraph.",
+        question: '"why call this?"',
+      },
+      {
+        n: 2,
+        name: "step_two",
+        args: "arg_a",
+        body: "What this step does and what it returns.",
+        question: '"and then?"',
+        branch: {
+          n: 3,
+          name: "alt_step",
+          condition: "if X",
+          body: "Conditional alternate step — only call when the condition is true.",
+        },
+      },
+    ],
+  },
+
+  // ── components / tools ──────────────────────────
+  // Either groups (2-col grid of grouped cards) OR a flat tools list. Not both.
+  groups: [
+    {
+      key: "inspection",
+      title: "Inspection",
+      icon: "eye",
+      blurb: "Read raw state. The starting point.",
+      items: [
+        { name: "tool_one", sub: "what it returns, briefly" },
+        { name: "tool_two", sub: "what it returns, briefly" },
+      ],
+    },
+  ],
+  // tools: [{ name: "tool_one", sub: "what it returns" }],
+
+  // ── install / use ───────────────────────────────
+  install: {
+    npm: "npm install your-mcp-tool",
+  },
+  run: "your-mcp-tool --help",
+  worksWith: ["any MCP client"],
+};
+</script>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="../assets/schematic.jsx"></script>
+<script type="text/babel" src="protocol-page.jsx"></script>
+<script type="text/babel">
+  ReactDOM.createRoot(document.getElementById("root")).render(<ProtocolPage config={CONFIG} />);
+</script>
+</body>
+</html>

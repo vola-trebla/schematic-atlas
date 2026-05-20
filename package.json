@@ -1,0 +1,27 @@
+{
+  "name": "schematic-atlas",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.59.4",
+    "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.5",
+    "prettier": "^3.8.3"
+  },
+  "lint-staged": {
+    "web/src/**/*.{ts,tsx}": [
+      "prettier --write",
+      "bash -c 'cd web && eslint --fix \"$@\"' --"
+    ],
+    "web/src/**/*.{css,json}": [
+      "prettier --write"
+    ],
+    "*.{md,json}": [
+      "prettier --write"
+    ]
+  }
+}

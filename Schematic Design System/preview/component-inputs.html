@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component — Inputs</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<link rel="stylesheet" href="_base.css" />
+<style>html,body{height:220px;}</style>
+</head>
+<body class="card-pad">
+<div style="height:100%;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;">
+  <label style="display:block;">
+    <span style="display:block;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;color:var(--ink);margin-bottom:6px;">tool name</span>
+    <input type="text" value="inspector-stdio" style="width:100%;background:transparent;border:0;border-bottom:1.5px solid var(--ink);font-family:var(--font-hand);font-size:18px;color:var(--ink);padding:6px 2px;outline:none;" />
+    <span style="display:block;font-family:var(--font-hand);font-style:italic;font-size:13px;color:var(--ink-blue);margin-top:4px;">— lowercase, kebab-case</span>
+  </label>
+  <label style="display:block;">
+    <span style="display:block;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:0.10em;text-transform:uppercase;color:var(--ink);margin-bottom:6px;">transport</span>
+    <input type="text" value="" placeholder="stdio | sse | ws" style="width:100%;background:transparent;border:0;border-bottom:2.5px solid var(--ink);font-family:var(--font-hand);font-size:18px;color:var(--ink);padding:6px 2px;outline:none;" />
+    <span style="display:block;font-family:var(--font-hand);font-style:italic;font-size:13px;color:var(--ink-blue);margin-top:4px;">— focused (2.5 px underline)</span>
+  </label>
+</div></body></html>

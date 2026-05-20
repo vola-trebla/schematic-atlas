@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Enrich Tool — Schematic Atlas</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<style>
+  body { margin: 0; min-height: 100vh; background: var(--paper); }
+  .page-shell {
+    max-width: 1280px; margin: 0 auto; padding: 0 84px;
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(20,18,12,0.04) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 70% 65%, rgba(20,18,12,0.03) 0 1px, transparent 1.5px),
+      radial-gradient(circle at 50% 80%, rgba(20,18,12,0.03) 0 1px, transparent 1.5px);
+    background-size: 7px 7px, 11px 11px, 13px 13px;
+    position: relative;
+    min-height: 100vh;
+  }
+  .page-shell::before, .page-shell::after {
+    content: ""; position: absolute; top: 0; bottom: 0; width: 1px;
+    background: rgba(21,22,27,0.10); pointer-events: none;
+  }
+  .page-shell::before { left: 36px; }
+  .page-shell::after  { right: 36px; }
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    padding: 14px 16px;
+    outline: none;
+    resize: vertical;
+    min-height: 380px;
+  }
+  textarea:focus { border-width: 2px; }
+  .pane-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .pane-label .sub {
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    color: var(--ink-muted);
+    text-transform: none;
+    font-size: 12px;
+  }
+  .btn-row { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .status {
+    font-family: var(--font-hand);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-blue);
+    margin-top: 10px;
+    min-height: 22px;
+  }
+  .err { color: var(--ink-red); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="../assets/schematic.jsx"></script>
+<script src="enrich.js"></script>
+
+<script type="text/babel">
+const EXAMPLE_FLAT = `{
+  "name": "env-secret-exposure-analyzer",
+  "partTag": "T.05",
+  "purpose": "Scans repositories and runtime environments for accidentally exposed secrets such as .env files, hardcoded API keys, and leaked tokens.",
+  "repo": "https://github.com/example/env-secret-exposure-analyzer",
+  "license": "MIT",
+  "tools": [
+    { "name": "scan_repo", "sub": "walks the working tree; flags risky paths and matches" },
+    { "name": "scan_file", "sub": "single-file scan with same matchers as scan_repo" },
+    { "name": "check_git_history", "sub": "rev-walks the last N commits looking for added secrets" },
+    { "name": "list_findings", "sub": "all findings from the current session, paginated" },
+    { "name": "get_finding_detail", "sub": "full context for one finding id" },
+    { "name": "analyze_severity", "sub": "scores a finding 0-10 using entropy + matcher confidence" },
+    { "name": "compare_baselines", "sub": "diff current findings against a saved baseline.json" },
+    { "name": "suggest_fix", "sub": "produces a remediation snippet" },
+    { "name": "export_report", "sub": "writes findings.json + a human summary to disk" }
+  ],
+  "install": { "npm": "npm install -g env-secret-exposure-analyzer" },
+  "run": "env-secret-exposure-analyzer scan ./",
+  "worksWith": ["any MCP client", "node >= 18"],
+  "warnings": [
+    "The scanner reads files. Don't point it at directories containing .env files you DO want to keep."
+  ]
+}`;
+
+function EnrichTool() {
+  const [src, setSrc] = React.useState(EXAMPLE_FLAT);
+  const [out, setOut] = React.useState("");
+  const [err, setErr] = React.useState(null);
+  const [status, setStatus] = React.useState("Edit the flat input on the left. Output regenerates on every keystroke.");
+
+  React.useEffect(() => {
+    try {
+      const flat = JSON.parse(src);
+      const rich = window.enrich(flat);
+      // Strip the internal _enrichment metadata before showing — it's noise
+      // for the human reviewer. Re-add only if needed for debugging.
+      const clean = { ...rich };
+      delete clean._enrichment;
+      setOut(JSON.stringify(clean, null, 2));
+      setErr(null);
+      setStatus(`Output regenerated. ${flat.tools?.length || 0} tools \u2192 ${(rich.groups || rich.tools || []).length} ${rich.groups ? "groups" : "flat items"}.`);
+    } catch (e) {
+      setErr(e.message);
+      setStatus("");
+    }
+  }, [src]);
+
+  const copy = () => {
+    navigator.clipboard?.writeText(out);
+    setStatus("Copied. Paste into the CONFIG block of a fresh protocol-page.html.");
+  };
+
+  const reset = () => { setSrc(EXAMPLE_FLAT); };
+
+  return (
+    <React.Fragment>
+      <WobbleDefs />
+      <div className="page-shell">
+        <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "32px 0 24px", borderBottom: `1.5px solid ${InkColors.ink}`, gap: 16, flexWrap: "wrap" }}>
+          <a href="../catalog/index.html" style={{ display: "inline-flex", alignItems: "center", gap: 14, backgroundImage: "none", flexShrink: 0, minWidth: 0 }}>
+            <svg width="40" height="40" viewBox="0 0 64 64" fill="none" stroke={InkColors.ink} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+              <circle cx="12" cy="14" r="1.8" fill={InkColors.ink} stroke="none" />
+              <path d="M12 14 C 30 14, 38 14, 46 18 C 54 22, 54 32, 46 36 C 38 40, 26 40, 18 44 C 10 48, 10 56, 22 56 L 50 56" />
+              <path d="M50 56 L 44 52 M 50 56 L 44 60" strokeWidth="2" />
+            </svg>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: 18, fontWeight: 600, color: InkColors.ink, paddingRight: 14, whiteSpace: "nowrap", letterSpacing: "-0.01em" }}>
+              schematic-atlas
+            </span>
+            <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, fontWeight: 600, letterSpacing: "0.10em", textTransform: "uppercase", color: InkColors.ink, border: `1.4px solid ${InkColors.ink}`, padding: "2px 6px", background: "var(--paper-bright)", alignSelf: "center", whiteSpace: "nowrap", flexShrink: 0 }}>
+              build tool
+            </span>
+          </a>
+          <a href="../catalog/index.html" style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: InkColors.muted, backgroundImage: "none" }}>
+            ← back to catalog
+          </a>
+        </header>
+
+        <section style={{ padding: "44px 0 32px" }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: InkColors.blue }}>
+            // hybrid workflow · step 1 of 3
+          </span>
+          <h1 style={{ fontFamily: "var(--font-display)", fontSize: 56, fontWeight: 700, lineHeight: 1.25, margin: "10px 0 32px", maxWidth: "22ch", color: InkColors.ink }}>
+            Enrich. Then hand-tweak the soul.
+          </h1>
+          <p style={{ fontFamily: "var(--font-hand)", fontSize: 19, lineHeight: 1.55, color: InkColors.ink, maxWidth: "60ch", margin: 0 }}>
+            Paste a flat README-shaped input on the left. The enricher buckets the tools, picks icons, synthesises a 3-step flow, infers stats, and emits a rich config on the right. Copy it. Paste into a fresh <code style={{ fontFamily: "var(--font-mono)", fontSize: 16, padding: "0 4px", borderBottom: `1.5px solid ${InkColors.ink}` }}>protocol-page.html</code>. Then hand-author the 10% the script can't write — specific margin annotations, a custom red stamp, nuanced captions.
+          </p>
+        </section>
+
+        <section style={{ padding: "0 0 60px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
+          <div>
+            <div className="pane-label">
+              <span>1. flat input</span>
+              <span className="sub">(json)</span>
+            </div>
+            <textarea
+              value={src}
+              onChange={(e) => setSrc(e.target.value)}
+              spellCheck={false}
+            />
+            <div className="btn-row">
+              <button onClick={reset} style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.10em", textTransform: "uppercase", background: "var(--paper-bright)", color: InkColors.ink, border: `1.5px solid ${InkColors.ink}`, padding: "8px 14px", cursor: "pointer" }}>
+                reset to example
+              </button>
+            </div>
+            {err && (
+              <div className="status err">parse error: {err}</div>
+            )}
+          </div>
+
+          <div>
+            <div className="pane-label">
+              <span>2. rich config</span>
+              <span className="sub">(paste into CONFIG block)</span>
+            </div>
+            <textarea
+              value={out}
+              readOnly
+              spellCheck={false}
+            />
+            <div className="btn-row">
+              <button onClick={copy} style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.10em", textTransform: "uppercase", background: InkColors.ink, color: "var(--paper)", border: `1.5px solid ${InkColors.ink}`, padding: "8px 14px", cursor: "pointer" }}>
+                copy
+              </button>
+            </div>
+            <div className="status">{status}</div>
+          </div>
+        </section>
+
+        <section style={{ padding: "32px 0 56px", borderTop: `1.5px solid ${InkColors.ink}` }}>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: InkColors.faint }}>
+            step 3
+          </span>
+          <h2 style={{ fontFamily: "var(--font-display)", fontSize: 36, fontWeight: 600, lineHeight: 1.05, margin: "10px 0 16px" }}>
+            Hand-author the soul.
+          </h2>
+          <p style={{ fontFamily: "var(--font-hand)", fontSize: 17, lineHeight: 1.55, color: InkColors.ink, maxWidth: "62ch", margin: "0 0 16px" }}>
+            The enricher gets you 90% of the way. The last 10% is what makes the page feel hand-drawn. Things to consider editing by hand before commit:
+          </p>
+          <ul style={{ fontFamily: "var(--font-hand)", fontSize: 16, lineHeight: 1.6, color: InkColors.ink, maxWidth: "62ch", paddingLeft: 22, margin: "0 0 12px" }}>
+            <li>Sharpen the <code style={{ fontFamily: "var(--font-mono)", fontSize: 14 }}>flow.steps[].question</code> annotations. The defaults are generic.</li>
+            <li>Add a real <code style={{ fontFamily: "var(--font-mono)", fontSize: 14 }}>flow.steps[].branch</code> with a custom red stamp where the agent actually has a conditional choice.</li>
+            <li>Polish each group's <code style={{ fontFamily: "var(--font-mono)", fontSize: 14 }}>blurb</code> to say something specific to this tool, not the category.</li>
+            <li>Add a <code style={{ fontFamily: "var(--font-mono)", fontSize: 14 }}>highlight</code> override if the auto-detected one is wrong.</li>
+            <li>Replace the <code style={{ fontFamily: "var(--font-mono)", fontSize: 14 }}>example.captions</code> with real prose; they're the most valuable part of the page.</li>
+          </ul>
+          <p style={{ fontFamily: "var(--font-hand)", fontStyle: "italic", fontSize: 15, lineHeight: 1.5, color: InkColors.blue, maxWidth: "62ch", margin: "16px 0 0" }}>
+            — then commit the finalised config. From the reader's perspective, the page is hand-drawn.
+          </p>
+        </section>
+      </div>
+    </React.Fragment>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<EnrichTool />);
+</script>
+</body>
+</html>

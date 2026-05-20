@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80" fill="none" stroke="#15161B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" font-family="Caveat, cursive">
+  
+  <g transform="translate(8, 12)">
+    <circle cx="8" cy="10" r="1.6" fill="#15161B" stroke="none"></circle>
+    <path d="M8 10 C 22 10, 28 10, 34 13 C 40 16, 40 24, 34 27 C 28 30, 19 30, 13 33 C 7 36, 7 42, 16 42 L 38 42"></path>
+    <path d="M38 42 L 33 39 M 38 42 L 33 45" stroke-width="1.6"></path>
+  </g>
+  
+  <text x="74" y="56" font-size="56" font-weight="700" fill="#15161B" stroke="none">Schematic</text>
+  
+  <g stroke="#15161B" stroke-width="1" transform="translate(74, 66)">
+    <line x1="0" y1="0" x2="216" y2="0"></line>
+    <line x1="0" y1="-3" x2="0" y2="3"></line>
+    <line x1="216" y1="-3" x2="216" y2="3"></line>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Spacing — Radius</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<link rel="stylesheet" href="_base.css" />
+<style>html,body{height:180px;}</style>
+</head>
+<body class="card-pad">
+<div class="row" style="height:100%;align-items:center;gap:40px;">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="width:90px;height:60px;border:1.5px solid var(--ink);"></div>
+    <span class="label-row">--r-0</span>
+    <span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-muted);">0px — default</span>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+    <div style="padding:6px 16px;border:1.5px solid var(--ink);border-radius:999px;font-family:var(--font-mono);font-size:12px;letter-spacing:0.10em;text-transform:uppercase;">label</div>
+    <span class="label-row">--r-pill</span>
+    <span style="font-family:var(--font-mono);font-size:11px;color:var(--ink-muted);">999px — chips only</span>
+  </div>
+  <div style="margin-left:auto;font-family:var(--font-hand);font-style:italic;font-size:14px;color:var(--ink-blue);max-width:28ch;line-height:1.45;">
+    Schematics don't have rounded corners. The single exception is adhesive-label chips.
+  </div>
+</div></body></html>

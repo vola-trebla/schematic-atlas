@@ -1,0 +1,7 @@
+#!/bin/sh
+
+# Run lint-staged: prettier --write + eslint --fix on staged files
+npx lint-staged
+
+# Type-check web/ — blocks commit if TS errors exist
+cd web && npx tsc --noEmit

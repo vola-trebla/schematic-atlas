@@ -1,0 +1,8 @@
+node_modules
+web/node_modules
+web/.next
+web/out
+web/next-env.d.ts
+Schematic Design System/archive
+Schematic Design System/scraps
+Schematic Design System/uploads

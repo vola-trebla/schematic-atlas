@@ -1,0 +1,489 @@
+/* =========================================================================
+   Schematic — Design System Tokens
+   Black gel pen on warm sketchbook paper. No gradients, no soft shadows.
+   ========================================================================= */
+
+/* ---- Fonts (Google Fonts substitution — see README) ---- */
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Architects+Daughter&family=JetBrains+Mono:wght@400;500;600;700&family=Special+Elite&display=swap");
+
+:root {
+  /* ---------- PAPER (backgrounds) ---------- */
+  --paper: #f2ede2; /* default sketchbook tone */
+  --paper-bright: #f8f4ea; /* high contrast surface */
+  --paper-dim: #e8e0ce; /* tonal step down, for panels */
+  --paper-shadow: #d9cfb8; /* paper grid line color */
+  --paper-edge: #c6b89a; /* visible page edge */
+
+  /* ---------- INK (the foreground) ---------- */
+  --ink: #15161b; /* primary ink — near-black w/ cool blue */
+  --ink-soft: #2e2f36; /* secondary text */
+  --ink-muted: #6a6962; /* tertiary, captions */
+  --ink-faint: #aca694; /* hatching, dividers, disabled */
+  --ink-ghost: #c9c2ae; /* "behind" ghost stroke for active state */
+
+  /* ---------- ACCENT INKS (use sparingly) ---------- */
+  --ink-red: #b43a2a; /* corrections, warnings, stamps */
+  --ink-red-soft: #d77565;
+  --ink-blue: #26537b; /* secondary annotations */
+  --ink-blue-soft: #6b8fb4;
+  --ink-green: #3f6e3a; /* success, "checked" */
+
+  /* ---------- HIGHLIGHTER ---------- */
+  --hl-yellow: #f2d957;
+  --hl-yellow-a: rgba(242, 217, 87, 0.7);
+
+  /* ---------- SEMANTIC ---------- */
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --fg-1: var(--ink);
+  --fg-2: var(--ink-soft);
+  --fg-3: var(--ink-muted);
+  --fg-4: var(--ink-faint);
+  --border: var(--ink);
+  --border-faint: var(--ink-faint);
+  --link: var(--ink);
+  --link-hover: var(--ink);
+  --danger: var(--ink-red);
+  --success: var(--ink-green);
+  --info: var(--ink-blue);
+  --focus: var(--ink-red);
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --font-display: "Caveat", "Bradley Hand", "Marker Felt", cursive;
+  --font-hand: "Architects Daughter", "Caveat", "Bradley Hand", cursive;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
+  --font-stamp: "Special Elite", "Courier Prime", "Courier New", monospace;
+
+  /* ---------- TYPE SCALE ---------- */
+  /* Hand fonts need to run LARGER than equivalent system fonts to read well. */
+  --fs-display-1: 84px; /* hero (Caveat) */
+  --fs-display-2: 64px; /* page heading (Caveat) */
+  --fs-h1: 44px; /* section title (Caveat) */
+  --fs-h2: 32px; /* subsection (Caveat) */
+  --fs-h3: 24px; /* card title (Architects Daughter) */
+  --fs-h4: 20px; /* small heading (Architects Daughter) */
+  --fs-body: 18px; /* body (Architects Daughter) */
+  --fs-body-sm: 16px; /* small body */
+  --fs-caption: 14px; /* caption (Architects Daughter) */
+  --fs-mono: 14px; /* default mono */
+  --fs-mono-sm: 12px; /* small mono / tags */
+  --fs-label: 11px; /* mono UPPERCASE tag */
+
+  /* ---------- LINE HEIGHT ---------- */
+  --lh-tight: 1.1; /* display */
+  --lh-snug: 1.3; /* headings */
+  --lh-body: 1.55; /* hand body */
+  --lh-loose: 1.75; /* annotation-rich body */
+  --lh-mono: 1.45;
+
+  /* ---------- LETTER SPACING ---------- */
+  --ls-stamp: 0.18em; /* stamps / labels */
+  --ls-label: 0.1em; /* mono uppercase */
+  --ls-tight: -0.01em; /* large display */
+
+  /* ---------- SPACING (5mm grid mental model) ---------- */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 20px;
+  --sp-5: 32px;
+  --sp-6: 52px;
+  --sp-7: 84px;
+  --sp-8: 128px;
+
+  /* ---------- LINE WEIGHTS ---------- */
+  --stroke-hair: 1px;
+  --stroke-rule: 1.5px;
+  --stroke-bold: 2px;
+  --stroke-diagram: 2.5px;
+
+  /* ---------- RADIUS ---------- */
+  --r-0: 0;
+  --r-pill: 999px; /* adhesive label chips only */
+
+  /* ---------- DASH PATTERNS ---------- */
+  --dash-thin: 4 3;
+  --dash-mid: 6 4;
+  --dash-wide: 10 6;
+
+  /* ---------- MOTION ---------- */
+  --dur-instant: 0ms;
+  --dur-fast: 120ms;
+  --dur-base: 180ms;
+  --dur-draw: 220ms;
+  --dur-slow: 420ms;
+  --ease-pen: cubic-bezier(0.7, 0, 0.3, 1);
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* ---------- LAYOUT ---------- */
+  --gutter: 84px;
+  --content-w: 1080px;
+  --measure: 62ch; /* readable line length for hand body */
+  --grid-unit: 20px; /* 5mm-ish */
+}
+
+/* =========================================================================
+   ELEMENT DEFAULTS
+   ========================================================================= */
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-hand);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* ---- Headings (Caveat — display hand) ---- */
+.h-display-1,
+h1.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-display-1);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  color: var(--ink);
+  margin: 0 0 var(--sp-5);
+}
+
+.h-display-2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-display-2);
+  line-height: var(--lh-tight);
+  color: var(--ink);
+  margin: 0 0 var(--sp-5);
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-snug);
+  margin: 0 0 var(--sp-4);
+  color: var(--ink);
+}
+
+h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-h2);
+  line-height: var(--lh-snug);
+  margin: var(--sp-6) 0 var(--sp-3);
+  color: var(--ink);
+}
+
+h3 {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: var(--fs-h3);
+  line-height: var(--lh-snug);
+  margin: var(--sp-5) 0 var(--sp-2);
+  color: var(--ink);
+}
+
+h4 {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: var(--fs-h4);
+  line-height: var(--lh-snug);
+  margin: var(--sp-4) 0 var(--sp-2);
+  color: var(--ink);
+}
+
+/* ---- Body (Architects Daughter) ---- */
+p,
+li,
+dd,
+blockquote {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  color: var(--ink);
+  max-width: var(--measure);
+  margin: 0 0 var(--sp-4);
+}
+
+small,
+.caption {
+  font-family: var(--font-hand);
+  font-size: var(--fs-caption);
+  color: var(--ink-muted);
+  line-height: var(--lh-body);
+}
+
+/* ---- Mono / labels (JetBrains Mono) ---- */
+code,
+kbd,
+samp,
+pre,
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  line-height: var(--lh-mono);
+  color: var(--ink);
+}
+
+code {
+  background: transparent;
+  padding: 0 0.2em;
+  border-bottom: 1px solid var(--ink-faint);
+}
+
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  background: transparent;
+  padding: var(--sp-4);
+  border: var(--stroke-rule) solid var(--ink);
+  overflow: auto;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono-sm);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: var(--paper-bright);
+  display: inline-block;
+}
+
+.stamp {
+  font-family: var(--font-stamp);
+  font-size: var(--fs-h3);
+  letter-spacing: var(--ls-stamp);
+  text-transform: uppercase;
+  color: var(--ink-red);
+  border: 2.5px solid var(--ink-red);
+  padding: 4px 12px;
+  display: inline-block;
+  transform: rotate(-3deg);
+  opacity: 0.85;
+}
+
+/* ---- Margin annotation ---- */
+.annot {
+  font-family: var(--font-hand);
+  font-style: italic;
+  font-size: var(--fs-caption);
+  color: var(--ink-blue);
+  line-height: var(--lh-body);
+  max-width: 22ch;
+}
+
+/* ---- Links ---- */
+a {
+  color: var(--ink);
+  text-decoration: none;
+  background-image: linear-gradient(var(--ink), var(--ink));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 1.5px;
+  transition: background-size var(--dur-draw) var(--ease-pen);
+}
+a:hover {
+  background-size: 100% 3px;
+}
+
+/* ---- HR ---- */
+hr {
+  border: 0;
+  border-top: 1.5px solid var(--ink);
+  margin: var(--sp-5) 0;
+}
+hr.dashed {
+  border: 0;
+  border-top: 1.5px dashed var(--ink);
+}
+
+/* ---- Highlight (clamped band, doesn't fill the whole line-box) ---- */
+mark,
+.hl {
+  color: var(--ink);
+  background: transparent;
+  background-image: linear-gradient(
+    transparent 28%,
+    var(--hl-yellow-a) 28%,
+    var(--hl-yellow-a) 86%,
+    transparent 86%
+  );
+  padding: 0 0.06em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---- Selection ---- */
+::selection {
+  background: var(--hl-yellow-a);
+  color: var(--ink);
+}
+
+/* =========================================================================
+   COMPONENT PRIMITIVES (drawn, not filled)
+   ========================================================================= */
+
+.card {
+  background: transparent;
+  border: var(--stroke-rule) solid var(--ink);
+  border-radius: var(--r-0);
+  padding: var(--sp-5);
+  position: relative;
+}
+
+.btn {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-mono);
+  font-weight: 600;
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  border: 1.5px solid var(--ink);
+  padding: 10px 18px;
+  cursor: pointer;
+  position: relative;
+  transition: transform var(--dur-fast) var(--ease-pen);
+}
+.btn:hover {
+  background: var(--paper-bright);
+}
+.btn:active {
+  transform: translate(2px, 2px);
+}
+.btn::before {
+  /* ghost stroke */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid var(--ink-ghost);
+  transform: translate(3px, 3px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-primary:hover {
+  background: #000;
+}
+
+.input {
+  background: transparent;
+  border: 0;
+  border-bottom: 1.5px solid var(--ink);
+  font-family: var(--font-hand);
+  font-size: var(--fs-body);
+  color: var(--ink);
+  padding: 6px 2px;
+  outline: none;
+  width: 100%;
+}
+.input::placeholder {
+  color: var(--ink-faint);
+}
+.input:focus {
+  border-bottom-width: 2.5px;
+}
+
+/* ---- Hatching shadow on element bottom-right ---- */
+.elev-hatch {
+  position: relative;
+}
+.elev-hatch::after {
+  content: "";
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 5px);
+  z-index: -1;
+  opacity: 0.55;
+}
+
+/* ---- Paper background utility ---- */
+.bg-paper {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(20, 18, 12, 0.025) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(20, 18, 12, 0.02) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 50% 80%, rgba(20, 18, 12, 0.018) 0 1px, transparent 1.5px);
+  background-size:
+    7px 7px,
+    11px 11px,
+    13px 13px;
+}
+
+.bg-grid {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(to right, var(--paper-shadow) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--paper-shadow) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.bg-dot {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--paper-shadow) 1.2px, transparent 1.4px);
+  background-size: 16px 16px;
+}
+
+/* ---- Halftone image utility ---- */
+.img-halftone {
+  filter: grayscale(1) contrast(1.4) brightness(1.05);
+  mix-blend-mode: multiply;
+}
+
+/* ---- Focus ring (drawn) ---- */
+:focus-visible {
+  outline: 2px solid var(--ink-red);
+  outline-offset: 4px;
+}
+
+/* ---- Pen-stroke draw-in animation ---- */
+@keyframes stroke-draw {
+  from {
+    stroke-dashoffset: var(--dash-len, 800);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.anim-draw path,
+.anim-draw line,
+.anim-draw rect,
+.anim-draw circle,
+.anim-draw polyline {
+  stroke-dasharray: var(--dash-len, 800);
+  stroke-dashoffset: var(--dash-len, 800);
+  animation: stroke-draw var(--dur-slow) var(--ease-pen) forwards;
+}
+
+/* ---- Wobble filter (apply to .wobble) ---- */
+.wobble {
+  filter: url(#wobble);
+}

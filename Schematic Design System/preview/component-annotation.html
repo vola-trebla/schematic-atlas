@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Component — Margin Annotation</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<link rel="stylesheet" href="_base.css" />
+<style>html,body{height:240px;}</style>
+</head>
+<body class="card-pad">
+<div style="height:100%;display:grid;grid-template-columns: 2fr 1fr;gap:24px;align-items:center;">
+  <div style="position:relative;border:1.5px solid var(--ink);padding:18px 22px;">
+    <div style="font-family:var(--font-display);font-size:28px;line-height:1;">connect()</div>
+    <div style="font-family:var(--font-mono);font-size:14px;margin-top:8px;">await mcp.connect({ transport: "stdio" })</div>
+    <div style="font-family:var(--font-hand);font-size:14px;color:var(--ink-muted);margin-top:6px;line-height:1.45;">Opens a long-lived stream. Negotiates protocol version once.</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <svg width="44" height="10" viewBox="0 0 44 10" fill="none" stroke="#26537B" style="flex-shrink:0;">
+      <circle cx="2" cy="5" r="1.8" fill="#26537B"/>
+      <path d="M 4 5 L 44 5" stroke-width="1" stroke-dasharray="4 3" stroke-linecap="round"/>
+    </svg>
+    <span style="font-family:var(--font-hand);font-style:italic;font-size:14px;color:var(--ink-blue);line-height:1.45;max-width:24ch;">— version negotiated here, before any tool list is fetched.</span>
+  </div>
+</div></body></html>
