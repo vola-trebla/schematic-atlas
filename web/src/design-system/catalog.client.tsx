@@ -111,14 +111,7 @@ function Intro({ count }: { count: number }) {
           index
         </span>
       </span>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "8fr 4fr",
-          gap: 48,
-          alignItems: "end",
-        }}
-      >
+      <div className="intro-grid">
         <p
           style={{
             fontFamily: "var(--font-hand)",
@@ -497,7 +490,7 @@ export function AtlasCatalog({ protocols }: { protocols: Record<string, Protocol
       <Intro count={entries.length} />
       <CategoryFilter active={active} onSelect={setActive} counts={counts} />
       <section aria-label="Protocol entries" style={{ padding: "32px 0 8px" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 28 }}>
+        <div className="catalog-grid">
           {visible.map((e) => (
             <EntryCard key={e.slug} entry={e} />
           ))}

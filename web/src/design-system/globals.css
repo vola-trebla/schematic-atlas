@@ -610,3 +610,97 @@ mark,
   background: rgba(21, 22, 27, 0.1);
   pointer-events: none;
 }
+
+/* =========================================================================
+   LAYOUT GRIDS
+   ========================================================================= */
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: 8fr 4fr;
+  gap: 48px;
+  align-items: end;
+}
+
+/* 5-column flow step grid: [num][card][question][arrow][branch] */
+.flow-step-grid {
+  display: grid;
+  grid-template-columns: 44px 1fr 180px 40px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+
+/* ── Mobile: < 640px ── */
+@media (max-width: 639px) {
+  .page-shell {
+    padding: 0 var(--sp-4);
+  }
+
+  .margin-rule {
+    display: none;
+  }
+
+  /* Hide the rotated "atlas entry" label — clips in narrow gutter */
+  .title-block-label {
+    display: none;
+  }
+
+  .catalog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .intro-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* ── Tablet + mobile: < 1024px — flow collapses ── */
+@media (max-width: 1023px) {
+  /* Desktop-only grid placeholders (cols 3–5 of the input row) */
+  .flow-col-placeholder {
+    display: none;
+  }
+
+  .page-shell {
+    padding: 0 var(--sp-5); /* 32px */
+  }
+
+  /* Collapse to 2-column flow: [num][card], question + branch wrap below */
+  .flow-step-grid {
+    grid-template-columns: 44px 1fr;
+  }
+
+  /* Question drops to col 2, next row */
+  .flow-step-question-col {
+    grid-column: 2;
+    padding-top: 0;
+  }
+
+  /* Arrow hidden — dashed border on branch card already signals conditionality */
+  .flow-step-arrow-col {
+    display: none;
+  }
+
+  /* Branch drops to col 2, after question */
+  .flow-step-branch-col {
+    grid-column: 2;
+  }
+}
+
+/* ── Desktop: ≥ 1024px — restore full gutter ── */
+@media (min-width: 1024px) {
+  .page-shell {
+    padding: 0 var(--gutter);
+  }
+}
