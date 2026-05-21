@@ -25,7 +25,10 @@ export function SearchInput({
       }}
     >
       <input
-        type="search"
+        // type="text" not "search": the native Webkit search-cancel pseudo-element
+        // can't be suppressed via inline styles, and we render our own × button below.
+        // Search semantics are still conveyed via the parent role="search" + aria-label.
+        type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="search protocols..."
@@ -40,9 +43,6 @@ export function SearchInput({
           color: InkColors.ink,
           padding: "6px 28px 6px 2px",
           outline: "none",
-          // Hide the native search clear (e.g. Webkit's × icon) — we render our own
-          appearance: "none",
-          WebkitAppearance: "none",
         }}
       />
       {value && (
