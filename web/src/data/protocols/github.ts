@@ -5,7 +5,7 @@ export const card: CardFields = {
   name: "github",
   partTag: "GH",
   category: "version-control",
-  nodes: ["agent intent", "github server", "repo · actions · alerts"],
+  nodes: ["agent", "github", "repos"],
   purpose:
     "Wraps the GitHub API as MCP — letting an agent read repos, triage issues and PRs, watch Actions runs, and act on Dependabot or code-scanning alerts.",
   stats: [

@@ -5,7 +5,7 @@ export const card: CardFields = {
   name: "filesystem",
   partTag: "FS",
   category: "filesystem",
-  nodes: ["allowed roots", "fs server", "agent file ops"],
+  nodes: ["agent", "fs server", "host fs"],
   purpose:
     "Gives an agent gated read · write · explore access to specific directories on the host, with allow-listed roots and dry-run-able edits.",
   stats: [

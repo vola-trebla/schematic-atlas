@@ -5,7 +5,7 @@ export const card: CardFields = {
   name: "git",
   partTag: "GIT",
   category: "version-control",
-  nodes: ["agent intent", "git server", "working tree"],
+  nodes: ["agent", "git", "repo"],
   purpose:
     "Lets an agent drive git through a structured MCP interface — status, diff, log, commit, branch — without spawning shells or parsing porcelain.",
   stats: [
