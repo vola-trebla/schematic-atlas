@@ -13,6 +13,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${config.name} — Schematic Atlas`,
     description: config.purpose,
+    openGraph: {
+      title: `${config.name} — Schematic Atlas`,
+      description: config.purpose,
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${config.name} — Schematic Atlas`,
+      description: config.purpose,
+    },
   };
 }
 
