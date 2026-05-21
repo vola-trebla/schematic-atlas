@@ -2,6 +2,8 @@ import { InkColors } from "../motifs";
 
 const CATEGORIES = [
   { key: "all", label: "all" },
+  { key: "version-control", label: "version-control" },
+  { key: "filesystem", label: "filesystem" },
   { key: "debugging", label: "debugging" },
   { key: "testing", label: "testing" },
   { key: "search", label: "search" },
