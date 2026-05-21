@@ -237,50 +237,6 @@ function FlowStep({ step, last }) {
   );
 }
 
-/* ───────────────────────── Flow section ───────────────────────── */
-function FlowSection({ flow }) {
-  if (!flow || !flow.steps || flow.steps.length === 0) return null;
-  return (
-    <section style={{ padding: "20px 0 60px", borderTop: `1px dashed ${InkColors.faint}` }}>
-      <div style={{ paddingTop: 40 }}>
-        <FigHeader n="1" title="The flow." />
-      </div>
-
-      {flow.input && (
-        <div style={{ display: "grid", gridTemplateColumns: "44px 1fr 180px 280px", gap: 20, alignItems: "center" }}>
-          <div />
-          <SchematicCard pad="14px 18px" style={{ borderWidth: "2.5px", display: "inline-block", minWidth: 220 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Icon name="terminal" size={18} />
-              <span style={{ fontFamily: "var(--font-display)", fontSize: 26, fontWeight: 700, lineHeight: 1, color: InkColors.ink }}>
-                {flow.input.label}
-              </span>
-              {flow.input.sub && (
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: InkColors.muted, letterSpacing: "0.04em" }}>
-                  {flow.input.sub}
-                </span>
-              )}
-            </div>
-          </SchematicCard>
-          <div />
-          <div />
-          <div />
-          <div style={{ display: "flex", justifyContent: "center", padding: "8px 0" }}>
-            <svg width="14" height="36" viewBox="0 0 14 36" fill="none" stroke={InkColors.ink}>
-              <line x1="7" y1="0" x2="7" y2="28" strokeWidth="1.6" strokeLinecap="round" />
-              <path d="M 2 23 L 7 32 L 12 23" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
-        </div>
-      )}
-
-      {flow.steps.map((s, i) => (
-        <FlowStep key={i} step={s} last={i === flow.steps.length - 1} />
-      ))}
-    </section>
-  );
-}
-
 /* ───────────────────────── Components / tools ───────────────────────── */
 function GroupCard({ group }) {
   return (
@@ -318,43 +274,6 @@ function GroupCard({ group }) {
         ))}
       </div>
     </SchematicCard>
-  );
-}
-
-function ComponentsSection({ groups, tools, hasFlow }) {
-  if ((!groups || groups.length === 0) && (!tools || tools.length === 0)) return null;
-  const figNum = hasFlow ? "2" : "1";
-  return (
-    <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
-      <div style={{ paddingTop: 40 }}>
-        <FigHeader n={figNum} title={groups ? "Components, grouped." : "Components."} />
-      </div>
-
-      {groups && groups.length > 0 && (
-        <div style={{ display: "grid", gridTemplateColumns: groups.length === 1 ? "1fr" : "1fr 1fr", gap: 24 }}>
-          {groups.map((g) => <GroupCard key={g.key} group={g} />)}
-        </div>
-      )}
-
-      {tools && tools.length > 0 && (
-        <SchematicCard pad="20px 24px">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 32px" }}>
-            {tools.map((t) => (
-              <div key={t.name} style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: 12, alignItems: "baseline", paddingBottom: 6, borderBottom: `1px dashed ${InkColors.faint}` }}>
-                <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, color: InkColors.ink, fontWeight: 500 }}>
-                  {t.name}
-                </span>
-                {t.sub && (
-                  <span style={{ fontFamily: "var(--font-hand)", fontStyle: "italic", fontSize: 13, color: InkColors.blue, lineHeight: 1.35 }}>
-                    — {t.sub}
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        </SchematicCard>
-      )}
-    </section>
   );
 }
 
@@ -543,19 +462,20 @@ function ProtocolPage({ config }) {
         <AtlasStrip config={config} />
         <TitleBlock config={config} />
         <StatsRow stats={config.stats} />
-        {hasFlow && <FlowSectionWithFig fig={flowFig} flow={config.flow} />}
-        {hasComponents && <ComponentsSectionWithFig fig={componentsFig} groups={config.groups} tools={config.tools} />}
+        {hasFlow && <FlowSection fig={flowFig} flow={config.flow} />}
+        {hasComponents && <ComponentsSection fig={componentsFig} groups={config.groups} tools={config.tools} />}
         {hasNotes && <NotesSection notes={config.notes} fig={notesFig} />}
         {hasExample && <WorkedExampleSection example={config.example} fig={exampleFig} />}
-        <InstallSectionWithFig fig={installFig} config={config} />
+        <InstallSection config={config} figNum={installFig} />
         <ProtocolFooter config={config} />
       </div>
     </React.Fragment>
   );
 }
 
-/* Thin wrappers that inject the correct fig number into each section */
-function FlowSectionWithFig({ fig, flow }) {
+/* ───────────────────────── Flow section ───────────────────────── */
+function FlowSection({ fig, flow }) {
+  if (!flow || !flow.steps || flow.steps.length === 0) return null;
   return (
     <section style={{ padding: "20px 0 60px", borderTop: `1px dashed ${InkColors.faint}` }}>
       <div style={{ paddingTop: 40 }}>
@@ -594,7 +514,9 @@ function FlowSectionWithFig({ fig, flow }) {
     </section>
   );
 }
-function ComponentsSectionWithFig({ fig, groups, tools }) {
+/* ───────────────────────── Components section ───────────────────────── */
+function ComponentsSection({ fig, groups, tools }) {
+  if ((!groups || groups.length === 0) && (!tools || tools.length === 0)) return null;
   return (
     <section style={{ padding: "20px 0 60px", borderTop: `1.5px solid ${InkColors.ink}` }}>
       <div style={{ paddingTop: 40 }}>
@@ -626,8 +548,4 @@ function ComponentsSectionWithFig({ fig, groups, tools }) {
     </section>
   );
 }
-function InstallSectionWithFig({ fig, config }) {
-  return <InstallSection config={config} figNum={fig} />;
-}
-
 Object.assign(window, { ProtocolPage });
