@@ -4,6 +4,7 @@ const CATEGORIES = [
   { key: "all", label: "all" },
   { key: "version-control", label: "version-control" },
   { key: "filesystem", label: "filesystem" },
+  { key: "messaging", label: "messaging" },
   { key: "debugging", label: "debugging" },
   { key: "testing", label: "testing" },
   { key: "search", label: "search" },
