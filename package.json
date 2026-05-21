@@ -6,7 +6,7 @@
     "web"
   ],
   "scripts": {
-    "prepare": "is-ci || husky",
+    "prepare": "node -e \"process.exitCode = process.env.CI ? 0 : 1\" || husky",
     "dev": "npm run dev --workspace=web",
     "build": "npm run build --workspace=web",
     "lint": "npm run lint --workspace=web",
@@ -16,7 +16,6 @@
     "@typescript-eslint/eslint-plugin": "^8.59.4",
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
-    "is-ci": "^4.1.0",
     "lint-staged": "^15.5.2",
     "prettier": "^3.8.3"
   },
