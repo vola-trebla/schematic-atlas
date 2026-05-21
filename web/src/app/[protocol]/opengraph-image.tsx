@@ -3,13 +3,13 @@ import path from "path";
 
 import { ImageResponse } from "next/og";
 
-import { PROTOCOLS } from "../../data/protocols";
+import { loadProtocol, PROTOCOL_SLUGS } from "../../data/load-protocol";
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export function generateStaticParams() {
-  return Object.keys(PROTOCOLS).map((protocol) => ({ protocol }));
+  return PROTOCOL_SLUGS.map((protocol) => ({ protocol }));
 }
 
 const INK = "#15161B";
@@ -25,7 +25,7 @@ function loadFont(): ArrayBuffer {
 
 export default async function Image({ params }: { params: Promise<{ protocol: string }> }) {
   const { protocol } = await params;
-  const config = PROTOCOLS[protocol];
+  const config = await loadProtocol(protocol);
 
   if (!config) return new Response("Not found", { status: 404 });
 

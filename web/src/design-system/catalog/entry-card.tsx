@@ -3,12 +3,12 @@
 import Link from "next/link";
 import { useState } from "react";
 
-import type { ProtocolConfig } from "../../types/protocol";
+import type { CatalogEntry } from "../../types/catalog";
 import { DimLine, Icon, InkColors } from "../motifs";
 
 import { EntryThumbnail } from "./entry-thumbnail";
 
-export type CatalogEntry = ProtocolConfig & { slug: string };
+export type { CatalogEntry };
 
 export function EntryCard({ entry }: { entry: CatalogEntry }) {
   const [hovered, setHovered] = useState(false);

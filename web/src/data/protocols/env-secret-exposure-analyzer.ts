@@ -1,21 +1,26 @@
+import type { CardFields } from "../../types/catalog";
 import type { ProtocolConfig } from "../../types/protocol";
 
-const config: ProtocolConfig = {
+export const card: CardFields = {
   name: "env-secret-exposure-analyzer",
   partTag: "ESEA",
   category: "security",
   nodes: ["repo", "analyzer", "findings"],
   purpose:
     "Scans projects for secret exposure risks (API keys, unprotected .env, logs) before an AI agent accidentally exfiltrates them.",
-  highlight: "secret exposure risks",
-  repo: "https://github.com/vola-trebla/env-secret-exposure-analyzer-mcp",
-  package: "env-secret-exposure-analyzer-mcp",
-  license: "MIT",
   stats: [
     ["20+", "patterns"],
     ["3", "risk levels"],
     ["Safe", "previews"],
   ],
+};
+
+const config: ProtocolConfig = {
+  ...card,
+  highlight: "secret exposure risks",
+  repo: "https://github.com/vola-trebla/env-secret-exposure-analyzer-mcp",
+  package: "env-secret-exposure-analyzer-mcp",
+  license: "MIT",
   flow: {
     input: {
       label: "scan_for_secrets",

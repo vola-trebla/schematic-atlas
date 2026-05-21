@@ -2,18 +2,16 @@
 
 import { useMemo, useState } from "react";
 
-import type { ProtocolConfig } from "../types/protocol";
+import type { CatalogEntry } from "../types/catalog";
 
 import { AtlasFooter } from "./catalog/atlas-footer";
 import { AtlasHeader } from "./catalog/atlas-header";
 import { CategoryFilter } from "./catalog/category-filter";
-import { EntryCard, type CatalogEntry } from "./catalog/entry-card";
+import { EntryCard } from "./catalog/entry-card";
 import { Intro } from "./catalog/intro";
 import { InkColors } from "./motifs";
 
-export function AtlasCatalog({ protocols }: { protocols: Record<string, ProtocolConfig> }) {
-  const entries: CatalogEntry[] = Object.entries(protocols).map(([slug, p]) => ({ ...p, slug }));
-
+export function AtlasCatalog({ entries }: { entries: CatalogEntry[] }) {
   const counts = useMemo(() => {
     const c: Record<string, number> = { all: entries.length };
     entries.forEach((e) => {

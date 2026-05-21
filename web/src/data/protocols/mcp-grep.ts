@@ -1,21 +1,26 @@
+import type { CardFields } from "../../types/catalog";
 import type { ProtocolConfig } from "../../types/protocol";
 
-const config: ProtocolConfig = {
+export const card: CardFields = {
   name: "mcp-grep",
   partTag: "GREP",
   category: "search",
   nodes: ["query", "shim", "ripgrep"],
   purpose:
     "Sub-millisecond grep as an MCP server, with glob-aware filtering and streaming matches.",
-  highlight: "Sub-millisecond grep",
-  repo: "https://github.com/example/mcp-grep",
-  package: "mcp-grep",
-  license: "MIT",
   stats: [
     ["18 KB", "binary"],
     ["< 0.4 ms", "p50"],
     ["0", "deps"],
   ],
+};
+
+const config: ProtocolConfig = {
+  ...card,
+  highlight: "Sub-millisecond grep",
+  repo: "https://github.com/example/mcp-grep",
+  package: "mcp-grep",
+  license: "MIT",
   flow: {
     input: {
       label: "search(pattern, path)",

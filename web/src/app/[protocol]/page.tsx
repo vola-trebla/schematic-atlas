@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { PROTOCOLS } from "../../data/protocols";
+import { loadProtocol, PROTOCOL_SLUGS } from "../../data/load-protocol";
 import { ProtocolRenderer } from "../../design-system/protocol-renderer";
 
 type PageProps = { params: Promise<{ protocol: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { protocol } = await params;
-  const config = PROTOCOLS[protocol];
+  const config = await loadProtocol(protocol);
   if (!config) return {};
   return {
     title: `${config.name} — Schematic Atlas`,
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ProtocolPage({ params }: PageProps) {
   const { protocol } = await params;
-  const config = PROTOCOLS[protocol];
+  const config = await loadProtocol(protocol);
 
   if (!config) {
     notFound();
@@ -42,5 +42,5 @@ export default async function ProtocolPage({ params }: PageProps) {
 }
 
 export function generateStaticParams() {
-  return Object.keys(PROTOCOLS).map((protocol) => ({ protocol }));
+  return PROTOCOL_SLUGS.map((protocol) => ({ protocol }));
 }
