@@ -14,14 +14,17 @@ import { ProtocolConfigSchema } from "../types/protocol.schema";
 type ProtocolModule = { default: ProtocolConfig };
 
 const REGISTRY: Record<string, () => Promise<ProtocolModule>> = {
+  "brave-search": () => import("./protocols/brave-search"),
   context7: () => import("./protocols/context7"),
   dbhub: () => import("./protocols/dbhub"),
   "env-secret-exposure-analyzer": () => import("./protocols/env-secret-exposure-analyzer"),
+  fetch: () => import("./protocols/fetch"),
   filesystem: () => import("./protocols/filesystem"),
   git: () => import("./protocols/git"),
   github: () => import("./protocols/github"),
   "mcp-grep": () => import("./protocols/mcp-grep"),
   memory: () => import("./protocols/memory"),
+  "ndjson-local-log-triage": () => import("./protocols/ndjson-local-log-triage"),
   "playwright-trace-decoder": () => import("./protocols/playwright-trace-decoder"),
   "react-render-profile": () => import("./protocols/react-render-profile"),
   slack: () => import("./protocols/slack"),
