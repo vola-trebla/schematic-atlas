@@ -17,6 +17,9 @@ const REGISTRY: Record<string, () => Promise<ProtocolModule>> = {
   context7: () => import("./protocols/context7"),
   dbhub: () => import("./protocols/dbhub"),
   "env-secret-exposure-analyzer": () => import("./protocols/env-secret-exposure-analyzer"),
+  filesystem: () => import("./protocols/filesystem"),
+  git: () => import("./protocols/git"),
+  github: () => import("./protocols/github"),
   "mcp-grep": () => import("./protocols/mcp-grep"),
   "playwright-trace-decoder": () => import("./protocols/playwright-trace-decoder"),
 };

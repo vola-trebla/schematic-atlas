@@ -1,5 +1,16 @@
 import { InkColors } from "../motifs";
 
+/**
+ * Glance-mark thumbnail for a catalog entry — 3 fixed-width rects connected
+ * by an arrow. Labels are mono 11px inside an 88px rect; 13+ characters
+ * overflow the rect border visibly. The renderer truncates with ellipsis as
+ * a safety net so future entries can't silently break the layout; protocol
+ * authors should still pick short labels (5-9 chars) for the best read.
+ */
+const MAX_LABEL_CHARS = 12;
+const fitLabel = (s: string) =>
+  s.length > MAX_LABEL_CHARS ? s.slice(0, MAX_LABEL_CHARS - 1) + "…" : s;
+
 export function EntryThumbnail({ nodes }: { nodes: [string, string, string] }) {
   const NW = 88,
     NH = 32,
@@ -32,7 +43,7 @@ export function EntryThumbnail({ nodes }: { nodes: [string, string, string] }) {
               fill={InkColors.ink}
               stroke="none"
             >
-              {label}
+              {fitLabel(label)}
             </text>
             {i < nodes.length - 1 && (
               <g>

@@ -12,6 +12,9 @@ import type { CatalogEntry } from "../types/catalog";
 import { card as context7 } from "./protocols/context7";
 import { card as dbhub } from "./protocols/dbhub";
 import { card as envSecretExposureAnalyzer } from "./protocols/env-secret-exposure-analyzer";
+import { card as filesystem } from "./protocols/filesystem";
+import { card as git } from "./protocols/git";
+import { card as github } from "./protocols/github";
 import { card as mcpGrep } from "./protocols/mcp-grep";
 import { card as playwrightTraceDecoder } from "./protocols/playwright-trace-decoder";
 
@@ -19,6 +22,9 @@ export const CATALOG: CatalogEntry[] = [
   { slug: "context7", ...context7 },
   { slug: "dbhub", ...dbhub },
   { slug: "env-secret-exposure-analyzer", ...envSecretExposureAnalyzer },
+  { slug: "filesystem", ...filesystem },
+  { slug: "git", ...git },
+  { slug: "github", ...github },
   { slug: "mcp-grep", ...mcpGrep },
   { slug: "playwright-trace-decoder", ...playwrightTraceDecoder },
 ];
