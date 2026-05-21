@@ -1,21 +1,26 @@
+import type { CardFields } from "../../types/catalog";
 import type { ProtocolConfig } from "../../types/protocol";
 
-const config: ProtocolConfig = {
+export const card: CardFields = {
   name: "playwright-trace-decoder",
   partTag: "TRACE",
   category: "testing",
   nodes: ["trace.zip", "decoder", "agent"],
   purpose:
     "An MCP server that turns Playwright trace.zip into structured signal for AI-driven failure analysis.",
-  highlight: "trace.zip",
-  repo: "https://github.com/vola-trebla/playwright-trace-decoder-mcp",
-  package: "playwright-trace-decoder-mcp",
-  license: "MIT",
   stats: [
     ["16", "tools"],
     ["~90%", "fewer tokens"],
     ["LRU 50", "cache"],
   ],
+};
+
+const config: ProtocolConfig = {
+  ...card,
+  highlight: "trace.zip",
+  repo: "https://github.com/vola-trebla/playwright-trace-decoder-mcp",
+  package: "playwright-trace-decoder-mcp",
+  license: "MIT",
   flow: {
     input: {
       label: "trace.zip",

@@ -1,20 +1,31 @@
+import type { CardFields } from "../../types/catalog";
 import type { ProtocolConfig } from "../../types/protocol";
 
-const config: ProtocolConfig = {
+/**
+ * Light card projection — imported by data/catalog.ts.
+ * Defined as a standalone literal (not derived from `config` below) so the
+ * bundler can tree-shake the heavy default export when catalog imports only
+ * this named export.
+ */
+export const card: CardFields = {
   name: "context7",
   partTag: "CTX7",
   category: "documentation",
   nodes: ["library name", "context7", "LLM context"],
   purpose:
     "Resolves any library name to a Context7 ID, then injects version-accurate docs and code examples directly into the agent's context.",
-  highlight: "version-accurate docs",
-  repo: "https://github.com/upstash/context7",
-  package: "@upstash/context7-mcp",
-  license: "MIT",
   stats: [
     ["2", "MCP tools"],
     ["2-step", "flow"],
   ],
+};
+
+const config: ProtocolConfig = {
+  ...card,
+  highlight: "version-accurate docs",
+  repo: "https://github.com/upstash/context7",
+  package: "@upstash/context7-mcp",
+  license: "MIT",
   flow: {
     input: {
       label: "user query",

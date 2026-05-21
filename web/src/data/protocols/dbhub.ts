@@ -1,21 +1,26 @@
+import type { CardFields } from "../../types/catalog";
 import type { ProtocolConfig } from "../../types/protocol";
 
-const config: ProtocolConfig = {
+export const card: CardFields = {
   name: "dbhub",
   partTag: "DBHUB",
   category: "persistence",
   nodes: ["agent", "dbhub", "database"],
   purpose:
     "Zero-dependency MCP gateway that connects any agent to PostgreSQL, MySQL, MariaDB, SQL Server, or SQLite through just 2 tools.",
-  highlight: "2 tools",
-  repo: "https://github.com/bytebase/dbhub",
-  package: "@bytebase/dbhub",
-  license: "MIT",
   stats: [
     ["2", "MCP tools"],
     ["0", "dependencies"],
     ["5", "databases"],
   ],
+};
+
+const config: ProtocolConfig = {
+  ...card,
+  highlight: "2 tools",
+  repo: "https://github.com/bytebase/dbhub",
+  package: "@bytebase/dbhub",
+  license: "MIT",
   flow: {
     input: {
       label: "SQL intent",
