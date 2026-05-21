@@ -101,6 +101,7 @@ function TitleBlock({ config }: { config: ProtocolConfig }) {
   return (
     <section style={{ padding: "52px 0 40px", position: "relative" }}>
       <span
+        className="title-block-label"
         style={{
           position: "absolute",
           top: 64,
@@ -210,7 +211,6 @@ export function FigHeader({ n, title }: { n: string | null; title: string }) {
  * The branch arrow lives in col 4 — no magic absolute offsets.
  * When there is no branch, cols 4+5 are empty and collapse visually.
  */
-const FLOW_GRID = "44px 1fr 180px 40px 1fr";
 
 function BranchArrow() {
   return (
@@ -239,14 +239,7 @@ function BranchArrow() {
 function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
   const { n, name, args, body, question, branch } = step;
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: FLOW_GRID,
-        gap: 20,
-        alignItems: "start",
-      }}
-    >
+    <div className="flow-step-grid">
       {/* col 1 — step number */}
       <div style={{ display: "flex", justifyContent: "center", paddingTop: 14 }}>
         <Callout letter={String(n)} size={34} />
@@ -269,15 +262,15 @@ function FlowStep({ step, last }: { step: FlowStepType; last: boolean }) {
       </SchematicCard>
 
       {/* col 3 — italic question annotation */}
-      <div style={{ paddingTop: 22 }}>
+      <div className="flow-step-question-col" style={{ paddingTop: 22 }}>
         {question && <span className="step-question">{question}</span>}
       </div>
 
       {/* col 4 — branch connector arrow (empty when no branch) */}
-      {branch ? <BranchArrow /> : <div />}
+      <div className="flow-step-arrow-col">{branch ? <BranchArrow /> : null}</div>
 
       {/* col 5 — branch card (empty when no branch) */}
-      <div style={{ paddingTop: 4 }}>
+      <div className="flow-step-branch-col" style={{ paddingTop: 4 }}>
         {branch && (
           <>
             <div style={{ marginBottom: 6 }}>
@@ -348,15 +341,7 @@ function FlowSection({ fig, flow }: { fig: string | null; flow: Flow }) {
       </div>
 
       {flow.input && (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: FLOW_GRID,
-            gap: 20,
-            alignItems: "center",
-            marginBottom: 20,
-          }}
-        >
+        <div className="flow-step-grid" style={{ alignItems: "center", marginBottom: 20 }}>
           <div />
           <SchematicCard
             pad="14px 18px"
@@ -382,30 +367,23 @@ function FlowSection({ fig, flow }: { fig: string | null; flow: Flow }) {
               )}
             </div>
           </SchematicCard>
-          {/* cols 3–5 empty, then down-arrow spans col 1–5 but sits under col 2 */}
-          <div />
-          <div />
-          <div />
+          {/* cols 3–5 placeholders — hidden on narrow screens via CSS */}
+          <div className="flow-col-placeholder" />
+          <div className="flow-col-placeholder" />
+          <div className="flow-col-placeholder" />
+          {/* down-arrow always anchored to col 2 */}
           <div
-            style={{
-              gridColumn: "1 / 6",
-              display: "grid",
-              gridTemplateColumns: FLOW_GRID,
-              gap: 20,
-            }}
+            style={{ gridColumn: 2, display: "flex", justifyContent: "center", padding: "8px 0" }}
           >
-            <div />
-            <div style={{ display: "flex", justifyContent: "center", padding: "8px 0" }}>
-              <svg width="14" height="36" viewBox="0 0 14 36" fill="none" stroke={InkColors.ink}>
-                <line x1="7" y1="0" x2="7" y2="28" strokeWidth="1.6" strokeLinecap="round" />
-                <path
-                  d="M 2 23 L 7 32 L 12 23"
-                  strokeWidth="1.6"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
+            <svg width="14" height="36" viewBox="0 0 14 36" fill="none" stroke={InkColors.ink}>
+              <line x1="7" y1="0" x2="7" y2="28" strokeWidth="1.6" strokeLinecap="round" />
+              <path
+                d="M 2 23 L 7 32 L 12 23"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
         </div>
       )}
@@ -505,13 +483,7 @@ function ComponentsSection({
       </div>
 
       {groups && groups.length > 0 && (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: groups.length === 1 ? "1fr" : "1fr 1fr",
-            gap: 24,
-          }}
-        >
+        <div className={groups.length === 1 ? undefined : "catalog-grid"} style={{ gap: 24 }}>
           {groups.map((g) => (
             <GroupCard key={g.key} group={g} />
           ))}
@@ -520,7 +492,7 @@ function ComponentsSection({
 
       {tools && tools.length > 0 && (
         <SchematicCard pad="20px 24px">
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 32px" }}>
+          <div className="catalog-grid" style={{ gap: "8px 32px" }}>
             {tools.map((t) => (
               <div
                 key={t.name}
@@ -552,13 +524,7 @@ function NotesSection({ notes, fig }: { notes: Note[]; fig: string | null }) {
       <div style={{ paddingTop: 40 }}>
         <FigHeader n={fig} title="Notes." />
       </div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: notes.length === 1 ? "1fr" : "1fr 1fr",
-          gap: 20,
-        }}
-      >
+      <div className={notes.length === 1 ? undefined : "catalog-grid"} style={{ gap: 20 }}>
         {notes.map((note, i) => (
           <div key={i} style={{ position: "relative" }}>
             <div style={{ marginBottom: 8, marginLeft: 6 }}>
