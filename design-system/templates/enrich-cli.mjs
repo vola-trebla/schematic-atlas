@@ -58,6 +58,24 @@ try {
       console.error("Could not extract a name from the README. Fill in a flat input by hand instead.");
       process.exit(2);
     }
+    // Guardrail: parseReadme only finds tools under specific headings
+    // (## Tools / ## API / ## Commands / ## Methods / ## Available tools).
+    // When it finds nothing, the enricher would silently synthesise a page
+    // with no components — or, worse, a downstream human fills in fabricated
+    // tool names. Refuse and let the human author a flat JSON input instead.
+    if (!flat.tools || flat.tools.length < 2) {
+      const found = flat.tools ? flat.tools.length : 0;
+      console.error(
+        `Refusing to enrich: parseReadme found ${found} tool${found === 1 ? "" : "s"} in the README.\n` +
+        `The README likely has no clear "## Tools" / "## API" / "## Commands" section,\n` +
+        `or the bullets don't match the expected "- \`tool_name\` — description" shape.\n` +
+        `\n` +
+        `Fix: write a flat JSON input by hand (see templates/examples/*) and re-run\n` +
+        `     node enrich-cli.mjs <input.json>\n` +
+        `instead. Synthesised tool lists are the #1 source of fake catalog entries.`
+      );
+      process.exit(3);
+    }
   } else {
     const raw = fs.readFileSync(args[0], "utf8");
     flat = JSON.parse(raw);
