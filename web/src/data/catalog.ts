@@ -16,7 +16,10 @@ import { card as filesystem } from "./protocols/filesystem";
 import { card as git } from "./protocols/git";
 import { card as github } from "./protocols/github";
 import { card as mcpGrep } from "./protocols/mcp-grep";
+import { card as memory } from "./protocols/memory";
 import { card as playwrightTraceDecoder } from "./protocols/playwright-trace-decoder";
+import { card as reactRenderProfile } from "./protocols/react-render-profile";
+import { card as slack } from "./protocols/slack";
 
 export const CATALOG: CatalogEntry[] = [
   { slug: "context7", ...context7 },
@@ -26,5 +29,8 @@ export const CATALOG: CatalogEntry[] = [
   { slug: "git", ...git },
   { slug: "github", ...github },
   { slug: "mcp-grep", ...mcpGrep },
+  { slug: "memory", ...memory },
   { slug: "playwright-trace-decoder", ...playwrightTraceDecoder },
+  { slug: "react-render-profile", ...reactRenderProfile },
+  { slug: "slack", ...slack },
 ];

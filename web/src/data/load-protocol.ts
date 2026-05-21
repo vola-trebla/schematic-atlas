@@ -21,7 +21,10 @@ const REGISTRY: Record<string, () => Promise<ProtocolModule>> = {
   git: () => import("./protocols/git"),
   github: () => import("./protocols/github"),
   "mcp-grep": () => import("./protocols/mcp-grep"),
+  memory: () => import("./protocols/memory"),
   "playwright-trace-decoder": () => import("./protocols/playwright-trace-decoder"),
+  "react-render-profile": () => import("./protocols/react-render-profile"),
+  slack: () => import("./protocols/slack"),
 };
 
 export const PROTOCOL_SLUGS = Object.keys(REGISTRY);
