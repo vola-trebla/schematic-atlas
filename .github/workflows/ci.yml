@@ -26,6 +26,14 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
+      - name: Verify generated registry is current
+        run: |
+          npm run build:registry
+          if ! git diff --exit-code src/data/registry.generated.ts; then
+            echo "::error::registry.generated.ts is out of date. Run 'npm run build:registry' and commit the result."
+            exit 1
+          fi
+
       - name: ESLint
         run: npx eslint src/
 

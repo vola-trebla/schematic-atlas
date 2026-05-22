@@ -3,40 +3,16 @@
  * function — when called, the bundler emits one chunk per protocol module,
  * so the [protocol]/page.tsx route only pulls the config it actually needs.
  *
- * Explicit registry (rather than `import('./protocols/' + slug)`) keeps
- * Next.js 16 / Turbopack honest about which modules can be loaded. When the
- * catalog grows past hand-maintainable size, generate this from a directory
- * listing at build time.
+ * REGISTRY itself is built by codegen — see registry.generated.ts.
+ * This file wraps it with Zod validation, so a malformed config fails
+ * loud at load time with a precise error pointing to the bad field.
  */
 import type { ProtocolConfig } from "../types/protocol";
 import { ProtocolConfigSchema } from "../types/protocol.schema";
 
-type ProtocolModule = { default: ProtocolConfig };
+import { REGISTRY, PROTOCOL_SLUGS } from "./registry.generated";
 
-const REGISTRY: Record<string, () => Promise<ProtocolModule>> = {
-  "brave-search": () => import("./protocols/brave-search"),
-  context7: () => import("./protocols/context7"),
-  dbhub: () => import("./protocols/dbhub"),
-  "env-secret-exposure-analyzer": () => import("./protocols/env-secret-exposure-analyzer"),
-  fetch: () => import("./protocols/fetch"),
-  filesystem: () => import("./protocols/filesystem"),
-  firecrawl: () => import("./protocols/firecrawl"),
-  gdrive: () => import("./protocols/gdrive"),
-  git: () => import("./protocols/git"),
-  github: () => import("./protocols/github"),
-  "mcp-grep": () => import("./protocols/mcp-grep"),
-  memory: () => import("./protocols/memory"),
-  "ndjson-local-log-triage": () => import("./protocols/ndjson-local-log-triage"),
-  "playwright-trace-decoder": () => import("./protocols/playwright-trace-decoder"),
-  postgres: () => import("./protocols/postgres"),
-  puppeteer: () => import("./protocols/puppeteer"),
-  "react-render-profile": () => import("./protocols/react-render-profile"),
-  sentry: () => import("./protocols/sentry"),
-  sequentialthinking: () => import("./protocols/sequentialthinking"),
-  slack: () => import("./protocols/slack"),
-};
-
-export const PROTOCOL_SLUGS = Object.keys(REGISTRY);
+export { PROTOCOL_SLUGS };
 
 export async function loadProtocol(slug: string): Promise<ProtocolConfig | null> {
   const loader = REGISTRY[slug];
